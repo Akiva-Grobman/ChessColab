@@ -18,7 +18,7 @@ abstract class piece {
     }
 
     public piece() {
-
+        this.isAlive = true;
     }
 
     public int getX() {
