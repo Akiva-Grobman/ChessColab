@@ -7,7 +7,6 @@ abstract class piece {
     private boolean isAlive;
     private String color;
 
-
     enum Type {
         KING,
         QUEEN,
@@ -37,9 +36,6 @@ abstract class piece {
         this.col = col;
     }
 
-
     abstract void move();
-
-
 
 }
