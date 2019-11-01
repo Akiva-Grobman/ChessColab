@@ -8,6 +8,7 @@ public class King extends piece {
 
     @Override
     void move() {
-
+        System.out.println("kings move...");
     }
+
 }
