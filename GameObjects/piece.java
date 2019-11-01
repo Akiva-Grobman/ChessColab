@@ -2,10 +2,11 @@ package GameObjects;
 
 abstract class piece {
 
-    private int row;
-    private int col;
-    private boolean isAlive;
-    private String color;
+    protected int row;
+    protected int column;
+    protected boolean isAlive;
+    protected String color;
+    protected Type pieceType;
 
     enum Type {
         KING,
@@ -16,24 +17,26 @@ abstract class piece {
         PAWN    
     }
 
-    public piece() {
+    public piece(Type pieceType, String color) {
         this.isAlive = true;
+        this.pieceType = pieceType;
+        this.color = color;
     }
 
     public int getRow() {
         return this.row;
     }
 
-    public int getCol() {
-        return this.col;
+    public int getColumn() {
+        return this.column;
     }
 
     public void setRow(int row) {
         this.row = row;
     }
 
-    public void setCol(int col) {
-        this.col = col;
+    public void setColumn(int column) {
+        this.column = column;
     }
 
     abstract void move();
