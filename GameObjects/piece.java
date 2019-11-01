@@ -8,7 +8,6 @@ abstract class piece {
     protected String color;
     protected Type pieceType;
 
-
     enum Type {
         KING,
         QUEEN,
@@ -40,9 +39,6 @@ abstract class piece {
         this.column = column;
     }
 
-
     abstract void move();
-
-
 
 }
