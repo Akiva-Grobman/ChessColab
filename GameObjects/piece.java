@@ -21,11 +21,11 @@ abstract class piece {
 
     }
 
-    public int getX() {
+    public int getRow() {
         return this.row;
     }
 
-    public int getY() {
+    public int getCol() {
         return this.col;
     }
 
