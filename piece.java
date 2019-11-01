@@ -9,10 +9,10 @@ abstract class piece {
     enum Type {
         KING,
         QUEEN,
-        ROOK,   // צריח
-        BISHOP, // רץ
-        KNIGHT, // פרש
-        PAWN    // חייל
+        ROOK,   
+        BISHOP, 
+        KNIGHT, 
+        PAWN    
     }
 
     public piece() {
