@@ -1,3 +1,5 @@
+package GameObjects;
+
 abstract class piece {
 
     private int row;
