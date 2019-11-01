@@ -1,13 +1,16 @@
 package GameObjects;
 
+import java.awt.*;
+
 public class King extends piece {
 
-    public King(){
+    public King(Color color){
+        super(Type.KING, color);
 
     }
 
     @Override
-    void move() {
+    void move(Point position) {
 
     }
 }

@@ -1,11 +1,13 @@
 package GameObjects;
 
+import java.awt.*;
+
 abstract class piece {
 
     protected int row;
     protected int column;
     protected boolean isAlive;
-    protected String color;
+    protected Color color;
     protected Type pieceType;
 
     enum Type {
@@ -17,11 +19,14 @@ abstract class piece {
         PAWN    
     }
 
-    public piece(Type pieceType, String color) {
+    public piece(Type pieceType, Color color) {
         this.isAlive = true;
         this.pieceType = pieceType;
         this.color = color;
     }
+
+    abstract void move(Point position);
+
 
     public int getRow() {
         return this.row;
@@ -39,6 +44,30 @@ abstract class piece {
         this.column = column;
     }
 
-    abstract void move();
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Type getPieceType() {
+        return pieceType;
+    }
+
+    public void setPieceType(Type pieceType) {
+        this.pieceType = pieceType;
+    }
+
 
 }
