@@ -1,5 +1,7 @@
 package GameObjects;
 
+import GameLogic.BackendBoard.Type;
+
 import java.awt.*;
 import java.util.List;
 
@@ -11,14 +13,6 @@ abstract class piece {
     protected Color color;
     protected Type pieceType;
 
-    enum Type {
-        KING,
-        QUEEN,
-        ROOK,   
-        BISHOP, 
-        KNIGHT, 
-        PAWN    
-    }
 
     public piece(Type pieceType, Color color) {
         this.isAlive = true;

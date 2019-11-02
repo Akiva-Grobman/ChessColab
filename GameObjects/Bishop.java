@@ -1,7 +1,9 @@
 package GameObjects;
 
+import GUI.Tile;
+
 import java.awt.*;
-import java.util.List;
+import java.util.List;import GameLogic.BackendBoard.Type;
 
 public class Bishop extends piece {
 

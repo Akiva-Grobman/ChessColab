@@ -2,6 +2,7 @@ package GameObjects;
 
 import java.awt.*;
 import java.util.List;
+import GameLogic.BackendBoard.Type;
 
 public class Rook extends piece {
 
