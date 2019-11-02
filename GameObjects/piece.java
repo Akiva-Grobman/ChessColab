@@ -1,6 +1,7 @@
 package GameObjects;
 
 import java.awt.*;
+import java.util.List;
 
 abstract class piece {
 
@@ -25,7 +26,9 @@ abstract class piece {
         this.color = color;
     }
 
-    abstract void move(Point position);
+    abstract List<Point> getAllMoves(Point position);
+
+    abstract void makeAMove(Point position);
 
 
     public int getRow() {

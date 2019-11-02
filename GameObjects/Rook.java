@@ -3,10 +3,10 @@ package GameObjects;
 import java.awt.*;
 import java.util.List;
 
-public class King extends piece {
+public class Rook extends piece {
 
-    public King(Color color){
-        super(Type.KING, color);
+    public Rook(Color color) {
+        super(Type.ROOK, color);
     }
 
     @Override
