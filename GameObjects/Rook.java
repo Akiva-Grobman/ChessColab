@@ -10,6 +10,10 @@ public class Rook extends piece {
         super(Type.ROOK, color);
     }
 
+    private  boolean isLegal(Point origin, Point destinion){
+        return false;
+    }
+
     @Override
     List<Point> getAllMoves(Point position) {
         return null;

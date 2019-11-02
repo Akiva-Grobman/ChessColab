@@ -29,6 +29,7 @@ public class Tile extends JPanel implements MouseListener {
         this.addMouseListener(this);
     }
 
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         this.setBackground(color);
