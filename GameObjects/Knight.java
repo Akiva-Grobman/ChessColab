@@ -10,6 +10,10 @@ public class Knight extends piece {
         super(Type.KNIGHT, color);
     }
 
+    private  boolean isLegal(Point origin, Point destinion){
+        return false;
+    }
+
     @Override
     List<Point> getAllMoves(Point position) {
         return null;
