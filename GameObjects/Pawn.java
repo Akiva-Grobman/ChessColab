@@ -9,6 +9,10 @@ public class Pawn extends Piece {
         super(Type.PAWN, color);
     }
 
+    private  boolean isLegal(Point origin, Point destinion){
+        return false;
+    }
+
     @Override
     List<Point> getAllMoves(Point position) {
         return null;

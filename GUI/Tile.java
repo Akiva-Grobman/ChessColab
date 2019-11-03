@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 class Tile extends JPanel implements MouseListener {
@@ -15,16 +14,24 @@ class Tile extends JPanel implements MouseListener {
     int x;
     int y;
     boolean isEmpty;
-    Color color;
+    Color tileColor;
+    Color pieceColor;
     Type pieceType;
-    Image pieceImage;
 
     Tile(int x, int y, Color color) {
         this.x = x;
         this.y = y;
-        this.color = color;
-        this.pieceImage = null;
+        this.tileColor = color;
+        this.isEmpty = true;
         panelSetUp();
+        paint();
+    }
+
+    public void paint() {
+        this.setBackground(tileColor);
+        if(!isEmpty){
+            this.add(getPieceImage());
+        }
     }
 
     private void panelSetUp() {
@@ -33,32 +40,9 @@ class Tile extends JPanel implements MouseListener {
         this.addMouseListener(this);
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        this.isEmpty = false;
-        this.pieceType = Type.KING;
-        this.setBackground(color);
-        if(!isEmpty){
-            drawImage(g);
-            this.repaint();
-        }
-    }
-
-    private void drawImage(Graphics g) {
-        if(pieceImage == null)
-        {
-            try {
-                pieceImage = getPieceImage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        g.drawImage(pieceImage,0, 0, this);
-    }
-
-    private BufferedImage getPieceImage() throws IOException {
-        BufferedImage pieceImage;
-        if(color == Color.black){
+    private JLabel getPieceImage(){
+        JLabel pieceImage;
+        if(tileColor == Color.black){
              pieceImage = getBlackImages();
         } else {
             pieceImage = getWhiteImages();
@@ -66,59 +50,64 @@ class Tile extends JPanel implements MouseListener {
         return pieceImage;
     }
 
-    private BufferedImage getWhiteImages() throws IOException {
-        BufferedImage pieceImage = null;
+    private JLabel getWhiteImages() {
+        JLabel pieceImage = null;
         switch (pieceType) {
             case KING:
-                pieceImage = getImageFromFileName("white_king.png");
+                pieceImage = getImageFromFileName("Images/white_king.png");
                 break;
             case QUEEN:
-                pieceImage = getImageFromFileName("white_queen.png");
+                pieceImage = getImageFromFileName("Images/white_queen.png");
                 break;
             case ROOK:
-                pieceImage = getImageFromFileName("white_rook.png");
+                pieceImage = getImageFromFileName("Images/white_rook.png");
                 break;
             case BISHOP:
-                pieceImage = getImageFromFileName("white_bishop.png");
+                pieceImage = getImageFromFileName("Images/white_bishop.png");
                 break;
             case KNIGHT:
-                pieceImage = getImageFromFileName("white_knight.png");
+                pieceImage = getImageFromFileName("Images/white_knight.png");
                 break;
             case PAWN:
-                pieceImage = getImageFromFileName("white_pawn.png");
+                pieceImage = getImageFromFileName("Images/white_pawn.png");
                 break;
         }
         return pieceImage;
     }
 
-    private BufferedImage getBlackImages() throws IOException {
-        BufferedImage pieceImage = null;
+    private JLabel getBlackImages() {
+        JLabel pieceImage = null;
         switch (pieceType) {
             case KING:
-                pieceImage = getImageFromFileName("black_king.png");
+                pieceImage = getImageFromFileName("Images/black_king.png");
                 break;
             case QUEEN:
-                pieceImage = getImageFromFileName("black_queen.png");
+                pieceImage = getImageFromFileName("Images/black_queen.png");
                 break;
             case ROOK:
-                pieceImage = getImageFromFileName("black_rook.png");
+                pieceImage = getImageFromFileName("Images/black_rook.png");
                 break;
             case BISHOP:
-                pieceImage = getImageFromFileName("black_bishop.png");
+                pieceImage = getImageFromFileName("Images/black_bishop.png");
                 break;
             case KNIGHT:
-                pieceImage = getImageFromFileName("black_knight.png");
+                pieceImage = getImageFromFileName("Images/black_knight.png");
                 break;
             case PAWN:
-                pieceImage = getImageFromFileName("black_pawn.png");
+                pieceImage = getImageFromFileName("Images/lack_pawn.png");
                 break;
         }
         return pieceImage;
     }
 
-    private BufferedImage getImageFromFileName(String fileName) throws IOException {
-        File classPathInput = new File(Tile.class.getResource(fileName).getFile());
-        return ImageIO.read(classPathInput);  // todo not working
+    private JLabel getImageFromFileName(String fileName) {
+        return new JLabel(new ImageIcon(getClass().getResource(fileName)));
+    }
+
+    void addPiece(Color pieceColor, Type pieceType) {
+        this.pieceColor = pieceColor;
+        this.pieceType = pieceType;
+        this.isEmpty = false;
     }
 
     @Override

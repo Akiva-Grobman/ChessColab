@@ -10,6 +10,10 @@ public class Queen extends Piece {
         super(Type.QUEEN, color);
     }
 
+    private  boolean isLegal(Point origin, Point destinion){
+        return false;
+    }
+
     @Override
     List<Point> getAllMoves(Point position) {
         return null;

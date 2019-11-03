@@ -10,6 +10,10 @@ public class Bishop extends Piece {
         super(Type.BISHOP, color);
     }
 
+    private  boolean isLegal(Point origin, Point destinion){
+        return false;
+    }
+
     @Override
     List<Point> getAllMoves(Point position) {
         return null;
