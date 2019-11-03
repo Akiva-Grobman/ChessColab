@@ -15,7 +15,12 @@ public class GUIBoard extends JFrame {
 
     GUIBoard() {
         boardSetUP();
+        addPiecesToBoard();
         this.setVisible(true);
+    }
+
+    // todo
+    private void addPiecesToBoard() {
     }
 
     private void boardSetUP() {
@@ -35,9 +40,9 @@ public class GUIBoard extends JFrame {
         for (int y = 0; y < ROWS; y++) {
             for (int x = 0; x < COLUMNS; x++) {
                 if((x + y) % 2 == 0){
-                    color = Color.black;
-                } else {
                     color = Color.white;
+                } else {
+                    color = Color.black;
                 }
                 tile = new Tile(x, y, color);
                 this.add(tile);
