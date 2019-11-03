@@ -1,11 +1,10 @@
 package GameObjects;
 
 import GameLogic.BackendBoard.Type;
-
 import java.awt.*;
 import java.util.List;
 
-abstract class piece {
+public abstract class Piece {
 
     protected int row;
     protected int column;
@@ -14,7 +13,7 @@ abstract class piece {
     protected Type pieceType;
 
 
-    public piece(Type pieceType, Color color) {
+    public Piece(Type pieceType, Color color) {
         this.isAlive = true;
         this.pieceType = pieceType;
         this.color = color;
@@ -23,7 +22,6 @@ abstract class piece {
     abstract List<Point> getAllMoves(Point position);
 
     abstract void makeAMove(Point position);
-
 
     public int getRow() {
         return this.row;
@@ -40,7 +38,6 @@ abstract class piece {
     public void setColumn(int column) {
         this.column = column;
     }
-
 
     public boolean isAlive() {
         return isAlive;

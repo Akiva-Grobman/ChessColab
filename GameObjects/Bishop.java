@@ -1,11 +1,10 @@
 package GameObjects;
 
-import GUI.Tile;
-
 import java.awt.*;
-import java.util.List;import GameLogic.BackendBoard.Type;
+import java.util.List;
+import GameLogic.BackendBoard.Type;
 
-public class Bishop extends piece {
+public class Bishop extends Piece {
 
     public Bishop(Color color) {
         super(Type.BISHOP, color);

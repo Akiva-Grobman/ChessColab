@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.List;
 import GameLogic.BackendBoard.Type;
 
-public class Queen extends piece {
+public class Queen extends Piece {
 
     public Queen(Color color) {
         super(Type.QUEEN, color);

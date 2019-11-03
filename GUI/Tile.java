@@ -1,5 +1,6 @@
 package GUI;
 
+import GameLogic.BackendBoard.Type;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,26 +9,21 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
 
-import GameLogic.BackendBoard.Type;
-
-
-public class Tile extends JPanel implements MouseListener {
+class Tile extends JPanel implements MouseListener {
 
     int x;
     int y;
     boolean isEmpty;
     Color color;
     Type pieceType;
+    Image pieceImage;
 
     Tile(int x, int y, Color color) {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.isEmpty = false;
-        this.pieceType = Type.KING;
+        this.pieceImage = null;
         panelSetUp();
     }
 
@@ -39,16 +35,25 @@ public class Tile extends JPanel implements MouseListener {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        BufferedImage pieceImage;
+        this.isEmpty = false;
+        this.pieceType = Type.KING;
         this.setBackground(color);
         if(!isEmpty){
+            drawImage(g);
+            this.repaint();
+        }
+    }
+
+    private void drawImage(Graphics g) {
+        if(pieceImage == null)
+        {
             try {
                 pieceImage = getPieceImage();
-                g.drawImage(pieceImage,0, 0, this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        g.drawImage(pieceImage,0, 0, this);
     }
 
     private BufferedImage getPieceImage() throws IOException {
@@ -112,7 +117,8 @@ public class Tile extends JPanel implements MouseListener {
     }
 
     private BufferedImage getImageFromFileName(String fileName) throws IOException {
-        return ImageIO.read(this.getClass().getResource(fileName));  // todo not working
+        File classPathInput = new File(Tile.class.getResource(fileName).getFile());
+        return ImageIO.read(classPathInput);  // todo not working
     }
 
     @Override
