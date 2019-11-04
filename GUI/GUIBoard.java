@@ -6,120 +6,47 @@ import java.awt.*;
 
 public class GUIBoard extends JFrame {
 
-    public static final int ROWS = 8;
-    public static final int COLUMNS = 8;
     private Tile [][] board;
+    private BackendBoard backendBoard;
     static final int TILE_SIZE = 90;
 
+    // todo add main to run the program
     public static void main(String [] args){
         new GUIBoard();
     }
 
     GUIBoard() {
         boardSetUP();
-        addPiecesToBoard();
+        syncWithLogicBoard();
         this.repaint();
         this.setVisible(true);
     }
 
-    public void paintComponents(Graphics g){
-        super.paintComponents(g);
-        paintBoard();
-    }
-
     private void paintBoard() {
-        for (int x = 0; x < ROWS; x++) {
-            for (int y = 0; y < COLUMNS; y++) {
+        for (int x = 0; x < BackendBoard.ROWS; x++) {
+            for (int y = 0; y < BackendBoard.COLUMNS; y++) {
                 board[x][y].paint();
             }
         }
     }
 
-
-    private void addPiecesToBoard() {
-        Color color;
-        for (int x = 0; x < COLUMNS; x++)
-        {
-            for (int y = 0; y < ROWS; y++)
-            {
-                if(x == 0 || x == 7)
-                {
-                    if(x == 0)
-                    {
-                        color  = Color.black;
-                    }
-                    else
-                    {
-                        color = Color.white;
-                    }
-                    switch(y)
-                    {
-                        // rooks
-                        case 0:
-                        case 7:
-                        {
-                            board[x][y].addPiece(color, BackendBoard.Type.ROOK);
-                            break;
-                        }
-                        // knights
-                        case 1:
-                        case 6:
-                        {
-                            board[x][y].addPiece(color, BackendBoard.Type.KNIGHT);
-                            break;
-                        }
-                        // bishops
-                        case 2:
-                        case 5:
-                        {
-                            board[x][y].addPiece(color, BackendBoard.Type.BISHOP);
-                            break;
-                        }
-                    }
-                }
-                if(x == 1)
-                {
-                    color  = Color.black;
-                }
-                else
-                {
-                    color = Color.white;
-                }
-                // pawns
-                if(x == 1 || x == 6)
-                {
-                    board[x][y].addPiece(color, BackendBoard.Type.PAWN);
-                }
-            }
-        }
-        // black king
-        board[0][4].addPiece(Color.black, BackendBoard.Type.KING);
-        // black queen
-        board[0][3].addPiece(Color.black, BackendBoard.Type.QUEEN);
-        // white king
-        board[7][4].addPiece(Color.white, BackendBoard.Type.KING);
-        // white queen
-        board[7][3].addPiece(Color.white, BackendBoard.Type.QUEEN);
-    }
-
-
     private void boardSetUP() {
-        int windowWidth = TILE_SIZE * ROWS;
-        int windowHeight = TILE_SIZE * COLUMNS;
-        this.setLayout(new GridLayout(ROWS,COLUMNS));
+        int windowWidth = TILE_SIZE * BackendBoard.ROWS;
+        int windowHeight = TILE_SIZE * BackendBoard.COLUMNS;
+        this.setLayout(new GridLayout(BackendBoard.ROWS, BackendBoard.COLUMNS));
         this.setSize(windowWidth, windowHeight);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        board = new Tile[ROWS][COLUMNS];
+        board = new Tile[BackendBoard.ROWS][BackendBoard.COLUMNS];
         addTiles();
     }
 
     private void addTiles() {
         Tile tile;
         Color color;
-        for (int y = 0; y < ROWS; y++) {
-            for (int x = 0; x < COLUMNS; x++) {
+        for (int y = 0; y < BackendBoard.ROWS; y++) {
+            for (int x = 0; x < BackendBoard.COLUMNS; x++) {
                 if((x + y) % 2 == 0){
                     color = Color.white;
                 } else {
@@ -130,5 +57,31 @@ public class GUIBoard extends JFrame {
                 board[x][y] = tile;
             }
         }
+    }
+
+    private void syncWithLogicBoard() {
+        Point position;
+        for (Tile[] tiles: board) {
+            for (Tile tile: tiles) {
+                position = new Point(tile.x, tile.y);
+                tile = getUpdatedTile(tile, position);
+            }
+        }
+    }
+
+    private Tile getUpdatedTile(Tile tile, Point position) {
+        if(backendBoard.getHasPiece(position)){
+            tile.addPiece(backendBoard.getPieceColor(position), backendBoard.getPieceType(position));
+        } else {
+            tile.pieceType = null;
+            tile.pieceColor = null;
+            tile.isEmpty = true;
+        }
+        return tile;
+    }
+
+    public void paintComponents(Graphics g){
+        super.paintComponents(g);
+        paintBoard();
     }
 }

@@ -1,25 +1,38 @@
 package GameLogic;
 
 import GameObjects.Piece;
+import GameLogic.BackendBoard.Type;
 
 import java.awt.*;
 
 class Tile {
 
-    Piece piece;
-    Point position;
-    boolean hasPiece;
-    Color tileColor;
+    private Piece piece;
+    private Point position;
+    private boolean hasPiece;
+    private Color tileColor;
 
-    public Tile(int x, int y, Color tileColor) {
+    Tile(int x, int y, Color tileColor) {
         this.hasPiece = false;
-        this.position.x = x;
-        this.position.y = y;
+        this.position = new Point(x,y);
         this.tileColor = tileColor;
     }
 
-    public void updateTile(Piece piece, boolean hasPiece){
+    void addPiece(Piece piece){
+        this.piece = piece;
+    }
+
+    void updateTile(Piece piece, boolean hasPiece){
         piece = piece;
         hasPiece = hasPiece;
     }
+
+    public boolean isHasPiece() {
+        return hasPiece;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
 }
