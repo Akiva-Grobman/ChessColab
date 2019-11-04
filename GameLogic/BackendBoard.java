@@ -114,16 +114,12 @@ public class BackendBoard {
     }
 
     public void makeAMove(Point origin, Point destination) {
-        updateLogicBoard(origin, destination);
+        board[destination.x][destination.y].updateTile(board[origin.x][origin.y].getPiece(), true);
+        board[origin.x][origin.y].updateTile(null, false);
     }
 
     public void paintBoard(){
         updateGUIBoard();
-    }
-
-    private void updateLogicBoard(Point origin, Point destination) {
-        board[destination.x][destination.y].updateTile(board[origin.x][origin.y].getPiece(), true);
-        board[origin.x][origin.y].updateTile(null, false);
     }
 
     private void updateGUIBoard(){
