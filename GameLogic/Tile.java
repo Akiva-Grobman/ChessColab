@@ -20,11 +20,12 @@ class Tile {
 
     void addPiece(Piece piece){
         this.piece = piece;
+        this.hasPiece = true;
     }
 
     void updateTile(Piece piece, boolean hasPiece){
-        piece = piece;
-        hasPiece = hasPiece;
+        this.piece = piece;
+        this.hasPiece = hasPiece;
     }
 
     public boolean isHasPiece() {

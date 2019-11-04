@@ -8,7 +8,6 @@ import java.awt.*;
 public class BackendBoard {
 
     private Tile [][] board;
-    private GUIBoard graphicalBoard;
     public static final int ROWS = 8;
     public static final int COLUMNS = 8;
 
@@ -108,22 +107,9 @@ public class BackendBoard {
         return board[position.x][position.y].getPiece().getColor();
     }
 
-    public void addGUIBoard(GUIBoard newGUIBoard){
-        this.graphicalBoard = newGUIBoard;
-        // todo add this board logic to gui board
-    }
-
     public void makeAMove(Point origin, Point destination) {
         board[destination.x][destination.y].updateTile(board[origin.x][origin.y].getPiece(), true);
         board[origin.x][origin.y].updateTile(null, false);
-    }
-
-    public void paintBoard(){
-        updateGUIBoard();
-    }
-
-    private void updateGUIBoard(){
-        graphicalBoard.repaint();
     }
 
 }

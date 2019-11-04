@@ -1,36 +1,42 @@
 package GUI;
 
 import GameLogic.BackendBoard.Type;
-import javax.imageio.ImageIO;
+import GameManagement.ActionsPreformedHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 class Tile extends JPanel implements MouseListener {
 
+    private ActionsPreformedHandler handler;
     int x;
     int y;
     boolean isEmpty;
     Color tileColor;
-    Color pieceColor;
+    Color pieceColor; // will probably not need this var
     Type pieceType;
 
-    Tile(int x, int y, Color color) {
+    Tile(int x, int y, Color color, ActionsPreformedHandler handler) {
         this.x = x;
         this.y = y;
         this.tileColor = color;
+        this.handler = handler;
         this.isEmpty = true;
         panelSetUp();
-        paint();
+        this.repaint();
     }
 
-    public void paint() {
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
         this.setBackground(tileColor);
         if(!isEmpty){
-            this.add(getPieceImage());
+            if(pieceColor == Color.black){
+                g.setColor(Color.red);
+            } else {
+                g.setColor(Color.blue);
+            }
+            g.drawString(pieceType.toString(), 20, 50);
         }
     }
 
@@ -40,6 +46,7 @@ class Tile extends JPanel implements MouseListener {
         this.addMouseListener(this);
     }
 
+    // todo not using this at the moment getting null pointer
     private JLabel getPieceImage(){
         JLabel pieceImage;
         if(tileColor == Color.black){
@@ -109,6 +116,8 @@ class Tile extends JPanel implements MouseListener {
         this.pieceType = pieceType;
         this.isEmpty = false;
     }
+
+    // todo will handle all of the actions preformed with the handler
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
