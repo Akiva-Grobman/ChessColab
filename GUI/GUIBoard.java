@@ -6,8 +6,8 @@ import java.awt.*;
 
 public class GUIBoard extends JFrame {
 
-    private final int ROWS = 8;
-    private final int COLUMNS = 8;
+    public static final int ROWS = 8;
+    public static final int COLUMNS = 8;
     private Tile [][] board;
     static final int TILE_SIZE = 90;
 

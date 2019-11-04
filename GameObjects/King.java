@@ -2,6 +2,8 @@ package GameObjects;
 
 import java.awt.*;
 import java.util.List;
+
+import GameLogic.BackendBoard;
 import GameLogic.BackendBoard.Type;
 
 public class King extends Piece {
@@ -10,7 +12,7 @@ public class King extends Piece {
         super(Type.KING, color);
     }
 
-    private  boolean isLegal(Point origin, Point destinion){
+    private  boolean isLegal(Point origin, Point destination){
         return false;
     }
 
@@ -20,10 +22,8 @@ public class King extends Piece {
     }
 
     @Override
-    void makeAMove(Point position) { //todo give a board
-        if(moveIsLegal(position)){
-            // board.makeAMove(x,y, position.x, position.y);
-        }
+    void makeAMove(Point position, BackendBoard board) {
+
     }
 
     private boolean moveIsLegal(Point position) {

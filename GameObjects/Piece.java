@@ -1,5 +1,6 @@
 package GameObjects;
 
+import GameLogic.BackendBoard;
 import GameLogic.BackendBoard.Type;
 import java.awt.*;
 import java.util.List;
@@ -21,7 +22,7 @@ public abstract class Piece {
 
     abstract List<Point> getAllMoves(Point position);
 
-    abstract void makeAMove(Point position);
+    abstract void makeAMove(Point position, BackendBoard board);
 
     public int getRow() {
         return this.row;

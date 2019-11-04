@@ -2,6 +2,8 @@ package GameObjects;
 
 import java.awt.*;
 import java.util.List;
+
+import GameLogic.BackendBoard;
 import GameLogic.BackendBoard.Type;
 
 public class Knight extends Piece {
@@ -20,7 +22,9 @@ public class Knight extends Piece {
     }
 
     @Override
-    void makeAMove(Point position) {
+    void makeAMove(Point position, BackendBoard board) {
 
     }
+
+
 }

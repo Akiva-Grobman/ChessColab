@@ -1,7 +1,10 @@
 package GameObjects;
 
 import java.awt.*;
-import java.util.List;import GameLogic.BackendBoard.Type;
+import java.util.List;
+
+import GameLogic.BackendBoard;
+import GameLogic.BackendBoard.Type;
 
 public class Pawn extends Piece {
 
@@ -19,7 +22,8 @@ public class Pawn extends Piece {
     }
 
     @Override
-    void makeAMove(Point position) {
+    void makeAMove(Point position, BackendBoard board) {
 
     }
+
 }
