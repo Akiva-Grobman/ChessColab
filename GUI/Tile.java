@@ -117,30 +117,28 @@ class Tile extends JPanel implements MouseListener {
         this.isEmpty = false;
     }
 
-    // todo will handle all of the actions preformed with the handler
-
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-
+        handler.mouseClicked(new Point(this.x, this.y));
     }
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-
+        handler.mousePressed(new Point(this.x, this.y));
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-
+        handler.mouseReleased(new Point(this.x, this.y));
     }
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
-
+        handler.mouseEntered(new Point(this.x, this.y));
     }
 
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
-
+        handler.mouseExited(new Point(this.x, this.y));
     }
 }
