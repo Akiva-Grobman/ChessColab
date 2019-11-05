@@ -1,6 +1,7 @@
 package GameObjects;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import GameLogic.BackendBoard;
@@ -18,7 +19,8 @@ public class Bishop extends Piece {
 
     @Override
     public List<Point> getAllMoves(BackendBoard board) {
-        return null;
+        List<Point> moves = new ArrayList<>();
+        return moves;
     }
 
     @Override

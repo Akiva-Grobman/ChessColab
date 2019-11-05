@@ -95,6 +95,10 @@ public class GUIBoard extends JFrame {
         paintBoard();
     }
 
+    public void drawTileRed(Point position){
+        board[position.x][position.y].tileColor = Color.red;
+    }
+
     public void resetTiles() {
         for (Tile[] tiles: board) {
             for (Tile tile: tiles) {

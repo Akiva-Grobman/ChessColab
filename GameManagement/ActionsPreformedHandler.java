@@ -39,7 +39,6 @@ public class ActionsPreformedHandler {
     }
 
     public void mousePressed(Point position) {
-
     }
 
     public void mouseReleased(Point position) {
@@ -61,6 +60,9 @@ public class ActionsPreformedHandler {
                 break;
             }
         }
+        if(backendBoard.getPiece(origin) == null){
+            controller.changeCurrentPlayersColor();
+        }
     }
 
     private void choosingPiece(Point position) {
@@ -69,6 +71,7 @@ public class ActionsPreformedHandler {
         if(hasPlayersPiece(position)) {
             isChoosingPiece = false;
             drawLegalTiles(position);
+            controller.drawPieceTileRed(position);
         }
     }
 

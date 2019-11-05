@@ -11,6 +11,7 @@ public class Main {
     private BackendBoard backendBoard;
     private GUIBoard GUIBoard;
     private Color currentPlayersColor = Color.white;
+    private Point redTile;
 
     private Main(){
         backendBoard = new BackendBoard();
@@ -45,6 +46,11 @@ public class Main {
     public static void main(String [] args){
         // todo add open window
         new Main();
+    }
+
+    void drawPieceTileRed(Point position) {
+        redTile = position;
+        GUIBoard.drawTileRed(position);
     }
 
 }
