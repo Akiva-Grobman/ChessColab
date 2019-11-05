@@ -20,9 +20,9 @@ public abstract class Piece {
         this.color = color;
     }
 
-    abstract List<Point> getAllMoves(Point position);
+    public abstract List<Point> getAllMoves(BackendBoard board);
 
-    abstract void makeAMove(Point position, BackendBoard board);
+    public abstract void makeAMove(Point position);
 
     public int getRow() {
         return this.row;

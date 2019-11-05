@@ -20,31 +20,68 @@ public class ActionsPreformedHandler {
         isChoosingPiece = true;
     }
 
-    public BackendBoard getBackendBoardInstance() {
-        return backendBoard;
-    }
-
     public void mouseClicked(Point position) {
         if(isChoosingPiece){
-            origin = position;
-            if(hasPlayersPiece(position)) {
-                isChoosingPiece = false;
-                // get colored tiles()
-            }
+            choosingPiece(position);
         } else {
             destination = position;
             if(!origin.equals(destination)){
-                /*
-                if(areTheSameColor(backendBoard.getPiece(origin).getPiece().getPieceColor, backendBoard.getPiece(destination).getPiece().getPieceColor){
-                    // get colored tiles()
+                if(isCurrentPlayersPiece()){
+                    choosingPiece(position);
                 } else {
-                    // try to make the move
+                    tryToMakeAMove(position);
                 }
-                 */
             }
+            controller.resetTileColors();
             isChoosingPiece = true;
         }
         updateBoards();
+    }
+
+    public void mousePressed(Point position) {
+
+    }
+
+    public void mouseReleased(Point position) {
+
+    }
+
+    public void mouseEntered(Point position) {
+        drawLegalTiles(position);
+    }
+
+    public void mouseExited(Point position) {
+        controller.resetTileColors();
+    }
+
+    private void tryToMakeAMove(Point position) {
+        for (Point legalDestination: legalMovesForPiece) {
+            if(position.equals(legalDestination)){
+                backendBoard.getPiece(origin).makeAMove(destination);
+                break;
+            }
+        }
+    }
+    private void choosingPiece(Point position) {
+        origin = position;
+        if(hasPlayersPiece(position)) {
+            isChoosingPiece = false;
+            drawLegalTiles(position);
+        }
+    }
+
+    private void updateBoards(){
+        //controller.updateLogicBoard();
+        controller.updateGUIBoard();
+    }
+
+    private void drawLegalTiles(Point position) {
+        legalMovesForPiece = getLegalMoves(position);
+        controller.drawTiles(legalMovesForPiece);
+    }
+
+    private boolean isCurrentPlayersPiece() {
+        return areTheSameColor(backendBoard.getPiece(origin).getColor(), backendBoard.getPiece(destination).getColor());
     }
 
     private boolean hasPlayersPiece(Point position) {
@@ -60,26 +97,12 @@ public class ActionsPreformedHandler {
         return color == currentPlayersColor;
     }
 
-    public void mousePressed(Point position) {
-        updateBoards();
+    private List<Point> getLegalMoves(Point position) {
+        return this.backendBoard.getPiece(position).getAllMoves(backendBoard);
     }
 
-    public void mouseReleased(Point position) {
-        updateBoards();
-    }
-
-    public void mouseEntered(Point position) {
-        //updateBoards();
-    }
-
-    public void mouseExited(Point position) {
-        //updateBoards();
-    }
-
-    // todo figure out a way to repaint the board
-    private void updateBoards(){
-        //controller.updateLogicBoard();
-        controller.updateGUIBoard();
+    public BackendBoard getBackendBoardInstance() {
+        return backendBoard;
     }
 
 }

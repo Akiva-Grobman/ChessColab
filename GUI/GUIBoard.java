@@ -6,6 +6,7 @@ import GameObjects.Piece;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GUIBoard extends JFrame {
 
@@ -77,10 +78,29 @@ public class GUIBoard extends JFrame {
             Piece piece = backendBoard.getPiece(position);
             tile.addPiece(piece.getColor(), piece.getPieceType());
         } else {
-            tile.pieceType = null;
-            tile.pieceColor = null;
-            tile.isEmpty = true;
+            tile.removePiece();
         }
     }
 
+    public void drawTiles(List<Point> legalMovesForPiece) {
+        for (Tile[] tiles: board) {
+            for (Tile tile: tiles) {
+                for (int i = 0; i < legalMovesForPiece.size(); i++) {
+                    if(tile.x == legalMovesForPiece.get(i).x && tile.y == legalMovesForPiece.get(i).y){
+                        tile.tileColor = Color.cyan;
+                    }
+                }
+            }
+        }
+        paintBoard();
+    }
+
+    public void resetTiles() {
+        for (Tile[] tiles: board) {
+            for (Tile tile: tiles) {
+                tile.resetTileColor();
+            }
+        }
+        paintBoard();
+    }
 }

@@ -12,17 +12,17 @@ public class Queen extends Piece {
         super(Type.QUEEN, color);
     }
 
-    private  boolean isLegal(Point origin, Point destinion){
+    private  boolean isLegal(Point origin, Point destination){
         return false;
     }
 
     @Override
-    List<Point> getAllMoves(Point position) {
+    public List<Point> getAllMoves(BackendBoard board) {
         return null;
     }
 
     @Override
-    void makeAMove(Point position, BackendBoard board) {
+    public void makeAMove(Point position) {
 
     }
 }

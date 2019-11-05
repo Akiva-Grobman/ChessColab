@@ -17,12 +17,12 @@ public class King extends Piece {
     }
 
     @Override
-    List<Point> getAllMoves(Point position) {
+    public List<Point> getAllMoves(BackendBoard board) {
         return null;
     }
 
     @Override
-    void makeAMove(Point position, BackendBoard board) {
+    public void makeAMove(Point position) {
 
     }
 

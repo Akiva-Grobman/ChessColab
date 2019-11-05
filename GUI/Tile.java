@@ -15,11 +15,12 @@ import java.net.URL;
 class Tile extends JPanel implements MouseListener {
 
     private ActionsPreformedHandler handler;
+    private Color originalColor;
+    private Color pieceColor;
     int x;
     int y;
     boolean isEmpty;
     Color tileColor;
-    Color pieceColor; // will probably not need this var
     Type pieceType;
     private BufferedImage image;
 
@@ -27,6 +28,7 @@ class Tile extends JPanel implements MouseListener {
         this.x = x;
         this.y = y;
         this.tileColor = color;
+        this.originalColor = color;
         this.handler = handler;
         this.isEmpty = true;
         panelSetUp();
@@ -120,6 +122,16 @@ class Tile extends JPanel implements MouseListener {
         this.pieceColor = pieceColor;
         this.pieceType = pieceType;
         this.isEmpty = false;
+    }
+
+    void removePiece() {
+        this.pieceType = null;
+        this.pieceColor = null;
+        this.isEmpty = true;
+    }
+
+    void resetTileColor(){
+        tileColor = originalColor;
     }
 
     @Override
