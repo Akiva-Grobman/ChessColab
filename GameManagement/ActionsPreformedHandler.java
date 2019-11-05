@@ -53,6 +53,7 @@ public class ActionsPreformedHandler {
     // todo figure out a way to repaint the board
     private void updateBoards(){
         //controller.updateLogicBoard();
+        System.out.println(backendBoard);
         controller.updateGUIBoard();
     }
 

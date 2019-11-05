@@ -4,6 +4,7 @@ import GUI.GUIBoard;
 import GameObjects.*;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class BackendBoard {
 
@@ -112,4 +113,15 @@ public class BackendBoard {
         board[origin.x][origin.y].updateTile(null, false);
     }
 
+    @Override
+    public String toString() {
+        String stringBoard = "";
+        for (Tile[] tiles: board) {
+            for (Tile tile: tiles) {
+                stringBoard += tile.toString();
+            }
+            stringBoard += "\n--------------------------------------------\n";
+        }
+        return stringBoard;
+    }
 }

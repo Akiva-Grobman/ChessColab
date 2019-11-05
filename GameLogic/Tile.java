@@ -1,7 +1,6 @@
 package GameLogic;
 
 import GameObjects.Piece;
-import GameLogic.BackendBoard.Type;
 
 import java.awt.*;
 
@@ -28,12 +27,19 @@ class Tile {
         this.hasPiece = hasPiece;
     }
 
-    public boolean isHasPiece() {
+    boolean isHasPiece() {
         return hasPiece;
     }
 
-    public Piece getPiece() {
+    Piece getPiece() {
         return piece;
     }
 
+    @Override
+    public String toString() {
+        if (piece == null){
+            return "null | ";
+        }
+        return piece.getPieceType() + " | ";
+    }
 }
