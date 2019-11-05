@@ -12,6 +12,10 @@ public class BackendBoard {
     public static final int ROWS = 8;
     public static final int COLUMNS = 8;
 
+    public Piece getPiece(Point position) {
+        return board[position.x][position.y].getPiece();
+    }
+
     public enum Type {
         KING,
         QUEEN,
@@ -96,16 +100,8 @@ public class BackendBoard {
         }
     }
 
-    public Type getPieceType(Point position) {
-        return board[position.x][position.y].getPiece().getPieceType();
-    }
-
     public boolean getHasPiece(Point position) {
         return board[position.x][position.y].isHasPiece();
-    }
-
-    public Color getPieceColor(Point position) {
-        return board[position.x][position.y].getPiece().getColor();
     }
 
     public void makeAMove(Point origin, Point destination) {

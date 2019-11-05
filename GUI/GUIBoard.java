@@ -2,6 +2,8 @@ package GUI;
 
 import GameLogic.BackendBoard;
 import GameManagement.ActionsPreformedHandler;
+import GameObjects.Piece;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -51,7 +53,7 @@ public class GUIBoard extends JFrame {
                 if((x + y) % 2 == 0){
                     color = Color.white;
                 } else {
-                    color = Color.black;
+                    color = Color.gray;
                 }
                 tile = new Tile(x, y, color, handler);
                 this.add(tile);
@@ -72,7 +74,8 @@ public class GUIBoard extends JFrame {
 
     private void updatedTile(Tile tile, Point position) {
         if(backendBoard.getHasPiece(position)){
-            tile.addPiece(backendBoard.getPieceColor(position), backendBoard.getPieceType(position));
+            Piece piece = backendBoard.getPiece(position);
+            tile.addPiece(piece.getColor(), piece.getPieceType());
         } else {
             tile.pieceType = null;
             tile.pieceColor = null;

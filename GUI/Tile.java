@@ -2,10 +2,15 @@ package GUI;
 
 import GameLogic.BackendBoard.Type;
 import GameManagement.ActionsPreformedHandler;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
 class Tile extends JPanel implements MouseListener {
 
@@ -16,6 +21,7 @@ class Tile extends JPanel implements MouseListener {
     Color tileColor;
     Color pieceColor; // will probably not need this var
     Type pieceType;
+    private BufferedImage image;
 
     Tile(int x, int y, Color color, ActionsPreformedHandler handler) {
         this.x = x;
@@ -31,12 +37,12 @@ class Tile extends JPanel implements MouseListener {
         super.paintComponent(g);
         this.setBackground(tileColor);
         if(!isEmpty){
-            if(pieceColor == Color.black){
-                g.setColor(Color.red);
-            } else {
-                g.setColor(Color.blue);
+            try {
+                image = getPieceImage();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            g.drawString(pieceType.toString(), 20, 50);
+            g.drawImage(image, 10, 10, GUIBoard.TILE_SIZE - 20, GUIBoard.TILE_SIZE - 20, this);
         }
     }
 
@@ -46,10 +52,9 @@ class Tile extends JPanel implements MouseListener {
         this.addMouseListener(this);
     }
 
-    // todo not using this at the moment getting null pointer
-    private JLabel getPieceImage(){
-        JLabel pieceImage;
-        if(tileColor == Color.black){
+    private BufferedImage getPieceImage() throws IOException{
+        BufferedImage pieceImage;
+        if(pieceColor == Color.black){
              pieceImage = getBlackImages();
         } else {
             pieceImage = getWhiteImages();
@@ -57,8 +62,8 @@ class Tile extends JPanel implements MouseListener {
         return pieceImage;
     }
 
-    private JLabel getWhiteImages() {
-        JLabel pieceImage = null;
+    private BufferedImage getWhiteImages() throws IOException {
+        BufferedImage pieceImage = null;
         switch (pieceType) {
             case KING:
                 pieceImage = getImageFromFileName("Images/white_king.png");
@@ -82,8 +87,8 @@ class Tile extends JPanel implements MouseListener {
         return pieceImage;
     }
 
-    private JLabel getBlackImages() {
-        JLabel pieceImage = null;
+    private BufferedImage getBlackImages() throws IOException {
+        BufferedImage pieceImage = null;
         switch (pieceType) {
             case KING:
                 pieceImage = getImageFromFileName("Images/black_king.png");
@@ -101,14 +106,14 @@ class Tile extends JPanel implements MouseListener {
                 pieceImage = getImageFromFileName("Images/black_knight.png");
                 break;
             case PAWN:
-                pieceImage = getImageFromFileName("Images/lack_pawn.png");
+                pieceImage = getImageFromFileName("Images/black_pawn.png");
                 break;
         }
         return pieceImage;
     }
 
-    private JLabel getImageFromFileName(String fileName) {
-        return new JLabel(new ImageIcon(getClass().getResource(fileName)));
+    private BufferedImage getImageFromFileName(String fileName) throws IOException {
+        return ImageIO.read(getClass().getResource(fileName));
     }
 
     void addPiece(Color pieceColor, Type pieceType) {
