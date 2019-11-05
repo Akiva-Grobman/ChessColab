@@ -8,13 +8,15 @@ import java.awt.*;
 public class ActionsPreformedHandler {
 
     private BackendBoard backendBoard;
+    private Main controller;
     private boolean isFirstClick;
     private Point origin;
     private Point destination;
 
-    ActionsPreformedHandler(BackendBoard backendBoard) {
-        isFirstClick = true;
+    ActionsPreformedHandler(BackendBoard backendBoard, Main controller) {
         this.backendBoard = backendBoard;
+        this.controller = controller;
+        isFirstClick = true;
     }
 
     public BackendBoard getBackendBoardInstance() {
@@ -26,32 +28,32 @@ public class ActionsPreformedHandler {
             origin = position;
             isFirstClick = false;
         } else {
-            backendBoard.makeAMove(origin, position);
+            destination = position;
             isFirstClick = true;
         }
-        repaintGUIBoard();
+        updateBoards();
     }
 
     public void mousePressed(Point position) {
-        repaintGUIBoard();
+        updateBoards();
     }
 
     public void mouseReleased(Point position) {
-        repaintGUIBoard();
+        updateBoards();
     }
 
     public void mouseEntered(Point position) {
-        repaintGUIBoard();
-
+        updateBoards();
     }
 
     public void mouseExited(Point position) {
-        repaintGUIBoard();
+        updateBoards();
     }
 
     // todo figure out a way to repaint the board
-    public void repaintGUIBoard(){
-
+    private void updateBoards(){
+        //controller.updateLogicBoard();
+        controller.updateGUIBoard();
     }
 
 }

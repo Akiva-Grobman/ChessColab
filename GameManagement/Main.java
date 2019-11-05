@@ -5,10 +5,26 @@ import GameLogic.BackendBoard;
 
 public class Main {
 
+    private BackendBoard backendBoard;
+    private GUIBoard GUIBoard;
+
+    private Main(){
+        backendBoard = new BackendBoard();
+        GUIBoard = new GUIBoard(new ActionsPreformedHandler(backendBoard, this));
+    }
+
+    void updateGUIBoard(){
+        GUIBoard.updateBoard();
+        GUIBoard.paintBoard();
+    }
+
+//    void updateLogicBoard(){
+//
+//    }
+
     public static void main(String [] args){
         // todo add open window
-        BackendBoard backendBoard = new BackendBoard();
-        GUIBoard GUIBoard = new GUIBoard(new ActionsPreformedHandler(backendBoard));
+        new Main();
     }
 
 }

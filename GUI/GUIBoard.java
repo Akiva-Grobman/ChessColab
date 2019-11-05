@@ -19,7 +19,11 @@ public class GUIBoard extends JFrame {
         this.setVisible(true);
     }
 
-    private void paintBoard() {
+    public void updateBoard(){
+        syncWithLogicBoard();
+    }
+
+    public void paintBoard() {
         for (int x = 0; x < BackendBoard.ROWS; x++) {
             for (int y = 0; y < BackendBoard.COLUMNS; y++) {
                 board[x][y].repaint();
