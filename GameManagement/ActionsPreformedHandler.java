@@ -62,7 +62,9 @@ public class ActionsPreformedHandler {
             }
         }
     }
+
     private void choosingPiece(Point position) {
+        legalMovesForPiece = null;
         origin = position;
         if(hasPlayersPiece(position)) {
             isChoosingPiece = false;
@@ -77,10 +79,15 @@ public class ActionsPreformedHandler {
 
     private void drawLegalTiles(Point position) {
         legalMovesForPiece = getLegalMoves(position);
-        controller.drawTiles(legalMovesForPiece);
+        if(legalMovesForPiece != null) {
+            controller.drawTiles(legalMovesForPiece);
+        }
     }
 
     private boolean isCurrentPlayersPiece() {
+        if(backendBoard.getPiece(origin) == null || backendBoard.getPiece(destination) == null) {
+            return false;
+        }
         return areTheSameColor(backendBoard.getPiece(origin).getColor(), backendBoard.getPiece(destination).getColor());
     }
 
@@ -98,6 +105,9 @@ public class ActionsPreformedHandler {
     }
 
     private List<Point> getLegalMoves(Point position) {
+        if(this.backendBoard.getPiece(position) == null) {
+            return null;
+        }
         return this.backendBoard.getPiece(position).getAllMoves(backendBoard);
     }
 
