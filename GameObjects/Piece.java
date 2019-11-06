@@ -7,8 +7,7 @@ import java.util.List;
 
 public abstract class Piece {
 
-    protected int row;
-    protected int column;
+    protected Point position;
     protected boolean isAlive;
     protected Color color;
     protected Type pieceType;
@@ -25,19 +24,19 @@ public abstract class Piece {
     public abstract void makeAMove(Point position);
 
     public int getRow() {
-        return this.row;
+        return this.position.x;
     }
 
     public int getColumn() {
-        return this.column;
+        return this.position.y;
     }
 
     public void setRow(int row) {
-        this.row = row;
+        this.position.x = row;
     }
 
     public void setColumn(int column) {
-        this.column = column;
+        this.position.y = column;
     }
 
     public boolean isAlive() {
@@ -62,6 +61,10 @@ public abstract class Piece {
 
     public void setPieceType(Type pieceType) {
         this.pieceType = pieceType;
+    }
+
+    public boolean isInBounds(int position){
+        return position >= 0 && position < 8;
     }
 
 
