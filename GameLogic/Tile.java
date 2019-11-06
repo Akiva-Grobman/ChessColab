@@ -19,8 +19,7 @@ class Tile {
 
     void addPiece(Piece piece){
         this.piece = piece;
-        this.piece.setRow(position.x);
-        this.piece.setColumn(position.y);
+        this.piece.setPosition(position);
         this.hasPiece = true;
     }
 

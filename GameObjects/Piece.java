@@ -10,8 +10,7 @@ public abstract class Piece {
     protected Point position;
     protected boolean isAlive;
     protected Color color;
-    protected Type pieceType;
-
+    private Type pieceType;
 
     public Piece(Type pieceType, Color color) {
         this.isAlive = true;
