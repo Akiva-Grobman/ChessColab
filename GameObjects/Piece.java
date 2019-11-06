@@ -31,12 +31,8 @@ public abstract class Piece {
         return this.position.y;
     }
 
-    public void setRow(int row) {
-        this.position.x = row;
-    }
-
-    public void setColumn(int column) {
-        this.position.y = column;
+    public void setPosition(Point position){
+        this.position = position;
     }
 
     public boolean isAlive() {

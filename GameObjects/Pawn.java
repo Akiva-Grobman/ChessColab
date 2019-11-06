@@ -13,7 +13,7 @@ public class Pawn extends Piece {
         super(Type.PAWN, color);
     }
 
-    private  boolean isLegal(Point origin, Point destination){
+    private  boolean isLegal(Point origin, Point destination) {
         return false;
     }
 

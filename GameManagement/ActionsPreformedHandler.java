@@ -46,11 +46,15 @@ public class ActionsPreformedHandler {
     }
 
     public void mouseEntered(Point position) {
-        drawLegalTiles(position);
+        if(isChoosingPiece) {
+            drawLegalTiles(position);
+        }
     }
 
     public void mouseExited(Point position) {
-        controller.resetTileColors();
+        if(isChoosingPiece) {
+            controller.resetTileColors();
+        }
     }
 
     private void tryToMakeAMove(Point position) {
