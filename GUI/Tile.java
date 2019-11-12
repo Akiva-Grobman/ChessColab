@@ -50,7 +50,7 @@ class Tile extends JPanel implements MouseListener {
 
     private void panelSetUp() {
         this.setPreferredSize(new Dimension(GUIBoard.TILE_SIZE, GUIBoard.TILE_SIZE));
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.setBorder(BorderFactory.createLineBorder(Color.darkGray));
         this.addMouseListener(this);
     }
 

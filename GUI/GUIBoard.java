@@ -12,6 +12,8 @@ public class GUIBoard extends JFrame {
 
     private Tile [][] board;
     private BackendBoard backendBoard;
+    private Color White = new Color(242, 218, 182);
+    private Color Black = new Color(181, 137, 102);
     static final int TILE_SIZE = 90;
 
     public GUIBoard(ActionsPreformedHandler handler) {
@@ -53,9 +55,9 @@ public class GUIBoard extends JFrame {
         for (int y = 0; y < BackendBoard.ROWS; y++) {
             for (int x = 0; x < BackendBoard.COLUMNS; x++) {
                 if((x + y) % 2 == 0){
-                    color = Color.white;
+                    color = White;
                 } else {
-                    color = Color.gray;
+                    color = Black;
                 }
                 tile = new Tile(x, y, color, handler);
                 this.add(tile);
