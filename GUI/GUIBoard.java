@@ -27,9 +27,9 @@ public class GUIBoard extends JFrame {
     }
 
     public void paintBoard() {
-        for (int x = 0; x < BackendBoard.ROWS; x++) {
-            for (int y = 0; y < BackendBoard.COLUMNS; y++) {
-                board[x][y].repaint();
+        for (int y = 0; y < BackendBoard.ROWS; y++) {
+            for (int x = 0; x < BackendBoard.COLUMNS; x++) {
+                board[y][x].repaint();
             }
         }
     }
@@ -38,6 +38,7 @@ public class GUIBoard extends JFrame {
         int windowWidth = TILE_SIZE * BackendBoard.ROWS;
         int windowHeight = TILE_SIZE * BackendBoard.COLUMNS;
         this.setLayout(new GridLayout(BackendBoard.ROWS, BackendBoard.COLUMNS));
+        this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         this.setSize(windowWidth, windowHeight);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,8 +50,8 @@ public class GUIBoard extends JFrame {
     private void addTiles(ActionsPreformedHandler handler) {
         Tile tile;
         Color color;
-        for (int x = 0; x < BackendBoard.ROWS; x++) {
-            for (int y = 0; y < BackendBoard.COLUMNS; y++) {
+        for (int y = 0; y < BackendBoard.ROWS; y++) {
+            for (int x = 0; x < BackendBoard.COLUMNS; x++) {
                 if((x + y) % 2 == 0){
                     color = Color.white;
                 } else {
@@ -58,7 +59,7 @@ public class GUIBoard extends JFrame {
                 }
                 tile = new Tile(x, y, color, handler);
                 this.add(tile);
-                board[x][y] = tile;
+                board[y][x] = tile;
             }
         }
     }
@@ -96,7 +97,7 @@ public class GUIBoard extends JFrame {
     }
 
     public void drawTileRed(Point position){
-        board[position.x][position.y].tileColor = Color.red;
+        board[position.y][position.x].tileColor = Color.red;
     }
 
     public void resetTiles() {

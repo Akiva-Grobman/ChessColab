@@ -21,12 +21,15 @@ public class ActionsPreformedHandler {
     }
 
     public void mouseClicked(Point position) {
-        if(isChoosingPiece){
+        if(isChoosingPiece && isCurrentPlayersPiece(position) && canMove(position)){
             choosingPiece(position);
-        } else {
+        } else if(origin.equals(position)) {
+            controller.resetTileColors();
+            isChoosingPiece = true;
+        } else if(!isChoosingPiece && !isCurrentPlayersPiece(position)) {
             destination = position;
-            if(!origin.equals(destination)){
-                if(isCurrentPlayersPiece()){
+            if (!origin.equals(destination)) {
+                if (isCurrentPlayersPiece(destination)) {
                     choosingPiece(position);
                 } else {
                     tryToMakeAMove(position);
@@ -46,7 +49,7 @@ public class ActionsPreformedHandler {
     }
 
     public void mouseEntered(Point position) {
-        if(isChoosingPiece) {
+        if(isChoosingPiece && isCurrentPlayersPiece(position)) {
             drawLegalTiles(position);
         }
     }
@@ -57,10 +60,16 @@ public class ActionsPreformedHandler {
         }
     }
 
+    private boolean canMove(Point position){
+        return getLegalMoves(position).size() != 0;
+    }
+
+
     private void tryToMakeAMove(Point position) {
+        // todo don't make the tile red if there are no moves (DONE: function "canMove")
         for (Point legalDestination: legalMovesForPiece) {
             if(position.equals(legalDestination)){
-                backendBoard.getPiece(origin).makeAMove(destination);
+                backendBoard.makeAMove(origin, destination);
                 break;
             }
         }
@@ -91,11 +100,12 @@ public class ActionsPreformedHandler {
         }
     }
 
-    private boolean isCurrentPlayersPiece() {
-        if(backendBoard.getPiece(origin) == null || backendBoard.getPiece(destination) == null) {
+    private boolean isCurrentPlayersPiece(Point position) {
+        try {
+            return areTheSameColor(backendBoard.getPiece(position).getColor(), controller.getCurrentPlayersColor());
+        } catch (NullPointerException e){
             return false;
         }
-        return areTheSameColor(backendBoard.getPiece(origin).getColor(), backendBoard.getPiece(destination).getColor());
     }
 
     private boolean hasPlayersPiece(Point position) {

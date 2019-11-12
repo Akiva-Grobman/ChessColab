@@ -12,8 +12,8 @@ public class BackendBoard {
     public static final int ROWS = 8;
     public static final int COLUMNS = 8;
 
-    public Piece getPiece(Point position) {
-        return board[position.x][position.y].getPiece();
+    public Piece getPiece(Point position) throws NullPointerException {
+        return board[position.y][position.x].getPiece();
     }
 
     public enum Type {
@@ -39,7 +39,7 @@ public class BackendBoard {
                 } else {
                     color = Color.black;
                 }
-                board[x][y] = new Tile(x, y, color);
+                board[y][x] = new Tile(x, y, color);
             }
         }
         addPieces();
@@ -47,38 +47,38 @@ public class BackendBoard {
 
     private void addPieces() {
         Color color;
-        for (int x = 0; x < ROWS; x++)
+        for (int y = 0; y < ROWS; y++)
         {
-            for (int y = 0; y < COLUMNS; y++)
+            for (int x = 0; x < COLUMNS; x++)
             {
-                color = getPieceColor(x);
-                if(x == 0 || x == 7)
+                color = getPieceColor(y);
+                if(y == 0 || y == 7)
                 {
-                    switch(y)
+                    switch(x)
                     {
                         case 0:
                         case 7:
                         {
-                            board[x][y].addPiece(new Rook(color));
+                            board[y][x].addPiece(new Rook(color));
                             break;
                         }
                         case 1:
                         case 6:
                         {
-                            board[x][y].addPiece(new Knight(color));
+                            board[y][x].addPiece(new Knight(color));
                             break;
                         }
                         case 2:
                         case 5:
                         {
-                            board[x][y].addPiece(new Bishop(color));
+                            board[y][x].addPiece(new Bishop(color));
                             break;
                         }
                     }
                 }
-                if(x == 1 || x == 6)
+                if(y == 1 || y == 6)
                 {
-                    board[x][y].addPiece(new Pawn(color));
+                    board[y][x].addPiece(new Pawn(color));
                 }
             }
         }
@@ -101,12 +101,13 @@ public class BackendBoard {
     }
 
     public boolean getHasPiece(Point position) {
-        return board[position.x][position.y].isHasPiece();
+        return board[position.y][position.x].isHasPiece();
     }
 
     public void makeAMove(Point origin, Point destination) {
-        board[destination.x][destination.y].updateTile(board[origin.x][origin.y].getPiece(), true);
-        board[origin.x][origin.y].updateTile(null, false);
+        board[origin.y][origin.x].getPiece().makeAMove(destination);
+        board[destination.y][destination.x].updateTile(board[origin.y][origin.x].getPiece(), true);
+        board[origin.y][origin.x].updateTile(null, false);
     }
 
     @Override

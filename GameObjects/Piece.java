@@ -58,9 +58,17 @@ public abstract class Piece {
         this.pieceType = pieceType;
     }
 
-    public boolean isInBounds(int position){
+    boolean isInBounds(int position){
         return position >= 0 && position < 8;
     }
 
-
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "position=" + position +
+                ", isAlive=" + isAlive +
+                ", color=" + color +
+                ", pieceType=" + pieceType +
+                '}';
+    }
 }
