@@ -1,136 +1,84 @@
-# ChessColab
-package GameObjects;
+private List<Point> removeMoves(List<Point> moves, Point origin){
+        BackendBoard newBoard = new BackendBoard();
+        newBoard = this.backendBoard;
+        int mon = 0;
+        boolean kingWillKilled = false;
+        List<Point> enemyMoves = new ArrayList<Point>();
+        Point king = new Point();
+        //backendBoard.getPiece(origin).getAllMoves()
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+        for (Point move: moves) {
+            newBoard = this.backendBoard;
+            newBoard.makeAMove(move, origin);
+            enemyMoves = getAllEnemyMoves(newBoard, origin);
+            king = getKing(newBoard, origin);
+            for (Point enemyMove: enemyMoves) {
+                if(enemyMove == king){
+                    moves.remove(mon);
+                }
+            }
+            mon++;
+        }
 
-import GameLogic.BackendBoard;
-import GameLogic.BackendBoard.Type;
-
-public class Pawn extends Piece {
-
-    private boolean madeAMove;
-
-    public Pawn(Color color) {
-        super(Type.PAWN, color);
-        madeAMove = false;
-    }
-
-
-
-    @Override
-    public List<Point> getAllMoves(BackendBoard board) {
-        Point origin = new Point();
-        origin.x = this.x;
-        origin.y = this.y;
-        List<Point> normalMoves = getNormalMoves(origin, board);
-        List<Point> killsMoves = getKillsMoves(origin, board);
-        List<Point> moves = normalMoves; // I know!!!
         return moves;
     }
 
-    @Override
-    public void makeAMove(Point position) {
-        List<Point> moves = getAllMoves(board); //There is no board
-        for (Point move : moves) {
-            this.x = position.x;
-            this.y = position.y;
+    public List<Point> getAllEnemyMoves(BackendBoard board, Point origin){
+        List<Point> enemyPieces = getAllEnemyPieces(board, origin);
+        List<Point> enemyMovesForPiece = new ArrayList<Point>();
+        List<Point> enemyMoves = new ArrayList<Point>();
+
+        for (Point enemyPiece: enemyPieces) {
+            enemyMovesForPiece = (board.getPiece(enemyPiece).getAllMoves(board));
+            enemyMoves.addAll(enemyMovesForPiece);
         }
-        madeAMove = true;
+
+        return enemyMoves;
     }
 
+    public List<Point> getAllEnemyPieces(BackendBoard board, Point origin){
+        List<Point> enemyPieces = new ArrayList<Point>();
+        Point piece = new Point();
+        Color color = null;
 
-    /*
-    private boolean isLegal(Point origin, Point destination, BackendBoard board) {
-        List<Point> normalMoves = getNormalMoves(origin, board);
-        List<Point> killsMoves = getKillsMoves(origin, board);
-        if(!hasEnemy(destination, board) && !madeAMove) {
+        if (board.getPiece(origin).getColor() == Color.white)
+            color = Color.black;
+        if (board.getPiece(origin).getColor() == Color.black)
+            color = Color.white;
 
-        }
-        return false;
-    }
-    */
-
-
-    public List<Point> getNormalMoves(Point origin, BackendBoard board) {
-        List<Point> moves = new ArrayList<>();
-        Point destination = new Point();
-        destination.y = origin.y+1;
-        destination.y = origin.y-1;
-        if(isNormalMove(origin, destination, board)) {
-            moves.add(destination);
-        }
-        return moves;
-    }
-
-
-    private boolean isNormalMove(Point origin, Point destination, BackendBoard board) {
-        if(this.color == Color.white) {
-            if (!hasEnemy (destination, board) && ((origin.y+2 == destination.y) ) && !madeAMove) {
-                return true;
-            }
-            else if (!hasEnemy (destination, board) && ((origin.y+1 == destination.y) )) {
-                return true;
-            }
-        } else {
-            if (!hasEnemy(destination, board) && ((origin.y-2 == destination.y)) && !madeAMove) {
-                return true;
-            }
-            else if (!hasEnemy(destination, board) && ((origin.y-1 == destination.y)) ) {
-                return true;
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                piece.x = x;
+                piece.y = y;
+                if(board.getHasPiece(piece) != false){
+                    if (board.getPiece(piece).getColor() == color){
+                        enemyPieces.add(piece);
+                    }
+                }
             }
         }
-        return false;
+
+        return enemyPieces;
     }
 
-    public List<Point> getKillsMoves(Point origin, BackendBoard board) {
-        List<Point> killsMoves = new ArrayList<>();
-        Point destination = new Point();
-        destination.x = origin.x+1;
-        destination.y = origin.y-1;
-        if(isKillMove(origin, destination, board)) {
-            killsMoves.add(destination);
-        }
-        destination.x = origin.x-1;
-        destination.y = origin.y-1;
-        if(isKillMove(origin, destination, board)) {
-            killsMoves.add(destination);
-        }
-        destination.x = origin.x+1;
-        destination.y = origin.y+1;
-        if(isKillMove(origin, destination, board)) {
-            killsMoves.add(destination);
-        }
-        destination.x = origin.x-1;
-        destination.y = origin.y-1;
-        if(isKillMove(origin, destination, board)) {
-            killsMoves.add(destination);
-        }
-        return killsMoves;
-    }
+    public Point getKing(BackendBoard board, Point origin){
+        List<Point> enemyPieces = new ArrayList<Point>();
+        Point piece = new Point();
+        Point king = new Point();
 
-    private boolean isKillMove(Point origin, Point destination, BackendBoard board) {
-        List<Point> moves = new ArrayList<>();
-        if(this.color == Color.white) {
-            if (hasEnemy(destination, board) && ((origin.y+1 == destination.y) && (origin.x-1 == destination.x ||origin.x+1 == destination.x) )) {
-                return true;
+
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                piece.x = x;
+                piece.y = y;
+                if(board.getHasPiece(piece) != false){
+                    if (board.getPiece(piece).getColor() == board.getPiece(piece).getColor()){
+                        king = piece;
+                        break;
+                    }
+                }
             }
         }
-        else if (hasEnemy(destination, board) && ((origin.y-1 == destination.y) && (origin.x-1 == destination.x ||origin.x+1 == destination.x) )) {
-            return true;
-        }
-        return false;
+
+        return king;
     }
-
-
-    private boolean hasEnemy(Point destination, BackendBoard board) {
-        return board.getPiece(destination).color != this.color;
-    }
-
-
-
-
-
-
-}
