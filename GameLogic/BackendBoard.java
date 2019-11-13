@@ -132,7 +132,7 @@ public class BackendBoard {
                 }
             }
         }
-        
+
         return playerPieces;
     }
 
@@ -150,7 +150,7 @@ public class BackendBoard {
 
         for (int y = 0; y < ROWS; y++) {
             for (int x = 0; x < COLUMNS; x++) {
-                if(board[y][x].isHasPiece() == true) {
+                if(board[y][x].isHasPiece()) {
                     if (board[y][x].getPiece().getColor() == enemyColor) {
                         enemyPiece.x = x;
                         enemyPiece.y = y;
@@ -160,6 +160,29 @@ public class BackendBoard {
             }
         }
         return enemyPieces;
+    }
+
+    public Point getPlayerKing(Point origin){
+        List<Point> enemyPieces = getAllEnemyPieces(origin);
+        Color turn = board[origin.y][origin.x].getPiece().getColor();
+        Point piece = new Point();
+        Point king = new Point();
+
+
+        for (int y = 0; y < ROWS; y++) {
+            for (int x = 0; x < COLUMNS; x++) {
+                piece.x = x;
+                piece.y = y;
+                if(board[y][x].isHasPiece()){
+                    if ((board[y][x].getPiece().getColor() == turn) && (board[y][x].getPiece().getPieceType() == Type.KING)){
+                        king = new Point(piece);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return king;
     }
 
     @Override
