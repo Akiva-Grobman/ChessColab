@@ -159,8 +159,26 @@ public class BackendBoard {
                 }
             }
         }
+
         return enemyPieces;
     }
+
+    public List<Point> getAllEnemyMoves(Point origin){
+        List<Point> enemyAllMoves = new ArrayList<Point>();
+        List<Point> enemyMoves = new ArrayList<Point>();
+        List<Point> enemyPieces = this.getAllEnemyPieces(origin);
+        for (Point enemyPiece: enemyPieces) {
+            enemyMoves = new ArrayList<Point>();
+            if(this.getPiece(enemyPiece).getPieceType() != Type.KNIGHT) { // FIXME: After the Knight is working - delete this if
+                enemyMoves = this.getPiece(enemyPiece).getAllMoves(this);
+                enemyAllMoves.addAll(enemyMoves);
+            }
+        }
+        
+        
+        return enemyAllMoves;
+    }
+
 
     public Point getPlayerKing(Point origin){
         List<Point> enemyPieces = getAllEnemyPieces(origin);
@@ -181,7 +199,7 @@ public class BackendBoard {
                 }
             }
         }
-        
+
         return king;
     }
 
