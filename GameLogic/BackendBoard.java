@@ -4,7 +4,10 @@ import GUI.GUIBoard;
 import GameObjects.*;
 
 import java.awt.*;
+import java.security.cert.PolicyNode;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class BackendBoard {
 
@@ -108,6 +111,55 @@ public class BackendBoard {
         board[origin.y][origin.x].getPiece().makeAMove(destination);
         board[destination.y][destination.x].updateTile(board[origin.y][origin.x].getPiece(), true);
         board[origin.y][origin.x].updateTile(null, false);
+    }
+
+
+
+    public List<Point> getAllPlayerPieces(Point origin){
+        List<Point> playerPieces = new ArrayList<Point>();
+        Color turn = board[origin.y][origin.x].getPiece().getColor();
+        Point playerPiece = new Point();
+
+
+        for (int y = 0; y < ROWS; y++) {
+            for (int x = 0; x < COLUMNS; x++) {
+                if(board[y][x].isHasPiece() == true) {
+                    if (board[y][x].getPiece().getColor() == turn) {
+                        playerPiece.x = x;
+                        playerPiece.y = y;
+                        playerPieces.add(new Point(playerPiece));
+                    }
+                }
+            }
+        }
+        
+        return playerPieces;
+    }
+
+    public List<Point> getAllEnemyPieces(Point origin){
+        List<Point> enemyPieces = new ArrayList<Point>();
+        Color turn = board[origin.y][origin.x].getPiece().getColor();
+        Color enemyColor = null;
+        Point enemyPiece = new Point();
+
+        if(turn == Color.white){
+            enemyColor = Color.black;
+        } else {
+            enemyColor = Color.white;
+        }
+
+        for (int y = 0; y < ROWS; y++) {
+            for (int x = 0; x < COLUMNS; x++) {
+                if(board[y][x].isHasPiece() == true) {
+                    if (board[y][x].getPiece().getColor() == enemyColor) {
+                        enemyPiece.x = x;
+                        enemyPiece.y = y;
+                        enemyPieces.add(new Point(enemyPiece));
+                    }
+                }
+            }
+        }
+        return enemyPieces;
     }
 
     @Override
