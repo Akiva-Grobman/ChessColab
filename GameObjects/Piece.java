@@ -66,7 +66,10 @@ public abstract class Piece {
     List<Point> removeCheckingMoves(List<Point> allMoves, BackendBoard board){
         List<Point> moves = new ArrayList<>(allMoves);
         BackendBoard newBoard = new BackendBoard(board);
-        board.makeAMove(new Point(4,1), new Point(4,4));
+        for (Point position: moves) {
+            newBoard.makeAMove(this.position, position);
+
+        }
         return moves;
     }
 

@@ -113,34 +113,58 @@ public class BackendBoard implements Cloneable {
         return board[position.y][position.x].getPiece();
     }
 
-    public List<Point> getAllPlayerPieces(Point origin){
-        List<Point> playerPieces = new ArrayList<Point>();
-        Color turn = board[origin.y][origin.x].getPiece().getColor();
-        Point playerPiece = new Point();
+    public List<Point> getAllEnemyMoves(Point origin){
+        List<Point> allEnemyMoves = new ArrayList<>();
+        List<Point> currentPieceMoves;
+        List<Point> enemyPieces = getAllEnemyPieces(origin);
+        for (Point enemyPiecePosition: enemyPieces) {
+            currentPieceMoves = getPiece(enemyPiecePosition).getAllMoves(this);
+            allEnemyMoves.addAll(currentPieceMoves); //todo might want to check for duplicates
+        }
+        return allEnemyMoves;
+    }
 
+    public Point getPlayerKingPosition(Point origin){
+        List<Point> playersPieces = getAllPlayerPieces(origin);
+        Color playersColor = board[origin.y][origin.x].getPiece().getColor();
+
+        for (Point currentPiecePosition: playersPieces) {
+            if(board[currentPiecePosition.y][currentPiecePosition.x].getPiece().getPieceType() == Type.KING){
+                if(board[currentPiecePosition.y][currentPiecePosition.x].getPiece().getColor() == playersColor){
+                    return currentPiecePosition;
+
+                }
+            }
+        }
+        throw new Error(" Game over this code should not have been called!\n current players color is" + playersColor.toString());
+    }
+
+    private List<Point> getAllPlayerPieces(Point origin){
+        List<Point> playersPieces = new ArrayList<>();
+        Color playersColor = board[origin.y][origin.x].getPiece().getColor();
+        Point playerPiecePosition;
 
         for (int y = 0; y < ROWS; y++) {
             for (int x = 0; x < COLUMNS; x++) {
                 if(board[y][x].isHasPiece()) {
-                    if (board[y][x].getPiece().getColor() == turn) {
-                        playerPiece.x = x;
-                        playerPiece.y = y;
-                        playerPieces.add(new Point(playerPiece));
+                    if (board[y][x].getPiece().getColor() == playersColor) {
+                        playerPiecePosition = new Point(x,y);
+                        playersPieces.add(new Point(playerPiecePosition));
                     }
                 }
             }
         }
 
-        return playerPieces;
+        return playersPieces;
     }
 
-    public List<Point> getAllEnemyPieces(Point origin){
-        List<Point> enemyPieces = new ArrayList<Point>();
-        Color turn = board[origin.y][origin.x].getPiece().getColor();
-        Color enemyColor = null;
+    private List<Point> getAllEnemyPieces(Point origin){
+        List<Point> enemyPieces = new ArrayList<>();
+        Color playersColor = board[origin.y][origin.x].getPiece().getColor();
+        Color enemyColor;
         Point enemyPiece = new Point();
 
-        if(turn == Color.white){
+        if(playersColor == Color.white){
             enemyColor = Color.black;
         } else {
             enemyColor = Color.white;
@@ -159,42 +183,6 @@ public class BackendBoard implements Cloneable {
         }
 
         return enemyPieces;
-    }
-
-    public List<Point> getAllEnemyMoves(Point origin){
-        List<Point> enemyAllMoves = new ArrayList<Point>();
-        List<Point> enemyMoves = new ArrayList<Point>();
-        List<Point> enemyPieces = this.getAllEnemyPieces(origin);
-        for (Point enemyPiece: enemyPieces) {
-            enemyMoves = new ArrayList<Point>();
-            if(this.getPiece(enemyPiece).getPieceType() != Type.KNIGHT) { // FIXME: After the Knight is working - delete this if
-                enemyMoves = this.getPiece(enemyPiece).getAllMoves(this);
-                enemyAllMoves.addAll(enemyMoves);
-            }
-        }
-        return enemyAllMoves;
-    }
-
-    public Point getPlayerKing(Point origin){
-        List<Point> enemyPieces = getAllEnemyPieces(origin);
-        Color turn = board[origin.y][origin.x].getPiece().getColor();
-        Point piece = new Point();
-        Point king = new Point();
-
-        for (int y = 0; y < ROWS; y++) {
-            for (int x = 0; x < COLUMNS; x++) {
-                piece.x = x;
-                piece.y = y;
-                if(board[y][x].isHasPiece()){
-                    if ((board[y][x].getPiece().getColor() == turn) && (board[y][x].getPiece().getPieceType() == Type.KING)){
-                        king = new Point(piece);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return king;
     }
 
     @Override
