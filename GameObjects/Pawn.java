@@ -19,6 +19,7 @@ public class Pawn extends Piece {
     @Override
     public List<Point> getAllMoves(BackendBoard board) {
         List<Point> moves = new ArrayList<>();
+        removeCheckingMoves(moves, board);
         Point origin = new Point();
         origin.x = this.position.x;
         origin.y = this.position.y;

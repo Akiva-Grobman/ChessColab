@@ -3,6 +3,7 @@ package GameObjects;
 import GameLogic.BackendBoard;
 import GameLogic.BackendBoard.Type;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece {
@@ -60,6 +61,13 @@ public abstract class Piece {
 
     boolean isInBounds(int position){
         return position >= 0 && position < 8;
+    }
+
+    List<Point> removeCheckingMoves(List<Point> allMoves, BackendBoard board){
+        List<Point> moves = new ArrayList<>(allMoves);
+        BackendBoard newBoard = new BackendBoard(board);
+        board.makeAMove(new Point(4,1), new Point(4,4));
+        return moves;
     }
 
     @Override

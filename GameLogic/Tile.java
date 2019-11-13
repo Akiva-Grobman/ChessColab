@@ -4,7 +4,7 @@ import GameObjects.Piece;
 
 import java.awt.*;
 
-class Tile {
+class Tile implements Cloneable{
 
     private Piece piece;
     private Point position;
@@ -34,6 +34,11 @@ class Tile {
 
     Piece getPiece() {
         return piece;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override

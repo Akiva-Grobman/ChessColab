@@ -1,23 +1,15 @@
 package GameLogic;
 
-import GUI.GUIBoard;
 import GameObjects.*;
-
 import java.awt.*;
-import java.security.cert.PolicyNode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class BackendBoard {
+public class BackendBoard implements Cloneable {
 
     private Tile [][] board;
     public static final int ROWS = 8;
     public static final int COLUMNS = 8;
-
-    public Piece getPiece(Point position) throws NullPointerException {
-        return board[position.y][position.x].getPiece();
-    }
 
     public enum Type {
         KING,
@@ -32,8 +24,9 @@ public class BackendBoard {
         initializeBoard();
     }
 
-
-
+    public BackendBoard(BackendBoard board) {
+        this.board = board.board.clone();
+    }
 
     private void initializeBoard() {
         board = new Tile[ROWS][COLUMNS];
@@ -116,7 +109,9 @@ public class BackendBoard {
         board[origin.y][origin.x].updateTile(null, false);
     }
 
-
+    public Piece getPiece(Point position) throws NullPointerException {
+        return board[position.y][position.x].getPiece();
+    }
 
     public List<Point> getAllPlayerPieces(Point origin){
         List<Point> playerPieces = new ArrayList<Point>();
@@ -180,46 +175,11 @@ public class BackendBoard {
         return enemyAllMoves;
     }
 
-
-    // FIXME: the bug is that the function do fake moves at the board...
-    public List<Point> removeMoves(List<Point> playerMoves, Point origin, BackendBoard backendBoard) {
-        BackendBoard newBoard = new BackendBoard();
-
-
-
-        int mon = 0;
-        List<Point> moves = new ArrayList<Point>(playerMoves);
-        boolean kingWillKilled = false;
-        Point king = new Point();
-        List<Point> enemyMoves = new ArrayList<Point>();
-
-        for (Point move: moves) {
-            newBoard = new BackendBoard();
-
-            newBoard.makeAMove(origin, move);
-            origin = new Point(move);
-
-            enemyMoves = newBoard.getAllEnemyMoves(origin);
-
-            king = new Point(newBoard.getPlayerKing(origin));
-            for (Point enemyMove: enemyMoves) {
-                if(enemyMove.x == king.x && enemyMove.y == king.y){
-                    moves.remove(mon);
-                }
-            }
-            mon++;
-        }
-
-        return moves;
-    }
-
-
     public Point getPlayerKing(Point origin){
         List<Point> enemyPieces = getAllEnemyPieces(origin);
         Color turn = board[origin.y][origin.x].getPiece().getColor();
         Point piece = new Point();
         Point king = new Point();
-
 
         for (int y = 0; y < ROWS; y++) {
             for (int x = 0; x < COLUMNS; x++) {
@@ -235,6 +195,11 @@ public class BackendBoard {
         }
 
         return king;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
