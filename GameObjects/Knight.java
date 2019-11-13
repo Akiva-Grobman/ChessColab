@@ -12,10 +12,6 @@ public class Knight extends Piece {
         super(Type.KNIGHT, color);
     }
 
-    private  boolean isLegal(Point origin, Point destination){
-        return false;
-    }
-
     @Override
     public List<Point> getAllMoves(BackendBoard board) {
         return null;

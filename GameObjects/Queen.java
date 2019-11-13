@@ -171,10 +171,4 @@ public class Queen extends Piece {
         return board.getPiece(destination).color != this.color;
     }
 
-
-    boolean isInBounds(int position){
-        return position >= 0 && position < 8;
-    }
-
-
 }

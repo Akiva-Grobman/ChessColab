@@ -102,18 +102,11 @@ public class Rook extends Piece {
         return false;
     }
 
-
     private boolean hasEnemy(Point destination, BackendBoard board) {
         if (board.getPiece(destination) == null) {
             return false;
         }
         return board.getPiece(destination).color != this.color;
     }
-
-
-    boolean isInBounds(int position){
-        return position >= 0 && position < 8;
-    }
-
 
 }
