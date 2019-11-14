@@ -138,7 +138,7 @@ public class Pawn extends Piece {
         Point checkedPosition = new Point(this.position.x, this.position.y);
         if((piecePosition.y == 3 && color == Color.white) || (piecePosition.y == 4 && color == Color.black)){
             checkedPosition.x += 1;
-            if(isInBounds(checkedPosition.x) && hasEnPassantMove(board.getPiece(checkedPosition) ,board)){
+            if(isInBounds(checkedPosition.x) && hasEnPassantMove(board.getPiece(checkedPosition))){
                 if(color == Color.white){
                     checkedPosition.y -= 1;
                 } else {
@@ -147,7 +147,7 @@ public class Pawn extends Piece {
                 enPassantMoves.add(checkedPosition);
             }
             checkedPosition = new Point(this.position.x, this.position.y);
-            if(isInBounds(checkedPosition.x) && hasEnPassantMove(board.getPiece(checkedPosition) ,board)){
+            if(isInBounds(checkedPosition.x) && hasEnPassantMove(board.getPiece(checkedPosition))){
                 if(color == Color.white){
                     checkedPosition.y -= 1;
                 } else {
@@ -159,7 +159,7 @@ public class Pawn extends Piece {
         return enPassantMoves;
     }
 
-    private boolean hasEnPassantMove(Piece piece, BackendBoard board){
+    private boolean hasEnPassantMove(Piece piece){
         if(piece instanceof Pawn){
             Pawn tempPawn = (Pawn) piece;
             if(tempPawn.isInEnPassantPosition) {
@@ -172,4 +172,5 @@ public class Pawn extends Piece {
     public List<Point> getEnPassantMoves() {
         return enPassantMoves;
     }
+
 }

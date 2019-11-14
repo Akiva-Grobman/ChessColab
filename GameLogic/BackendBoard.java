@@ -125,7 +125,7 @@ public class BackendBoard implements Cloneable {
         originTile.updateTile(null, false);
     }
 
-    public Piece getPiece(Point position) throws NullPointerException {
+    public Piece getPiece(Point position) {
         return board[position.y][position.x].getPiece();
     }
 

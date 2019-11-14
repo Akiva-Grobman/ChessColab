@@ -23,24 +23,8 @@ public abstract class Piece implements Cloneable{
 
     public abstract void makeAMove(Point position);
 
-    public int getRow() {
-        return this.position.x;
-    }
-
-    public int getColumn() {
-        return this.position.y;
-    }
-
     public void setPosition(Point position){
         this.position = position;
-    }
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
     }
 
     public Color getColor() {

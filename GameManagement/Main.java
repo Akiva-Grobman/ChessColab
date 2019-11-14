@@ -43,14 +43,14 @@ public class Main {
         this.GUIBoard.resetTiles();
     }
 
-    public static void main(String [] args){
-        // todo add open window
-        new Main();
-    }
-
     void drawPieceTileRed(Point position) {
         redTile = position;
         GUIBoard.drawTileRed(position);
+    }
+
+    public static void main(String [] args){
+        // todo add open window
+        new Main();
     }
 
 }
