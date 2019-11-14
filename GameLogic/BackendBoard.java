@@ -3,6 +3,7 @@ package GameLogic;
 import GUI.GUIBoard;
 import GameObjects.*;
 import java.awt.*;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,6 +127,10 @@ public class BackendBoard implements Cloneable {
 
     public Piece getPiece(Point position) throws NullPointerException {
         return board[position.y][position.x].getPiece();
+    }
+
+    public void clearTile(Point position){
+        board[position.y][position.x].updateTile(null, false);
     }
 
     public List<Point> getAllEnemyMoves(Point origin){

@@ -9,11 +9,14 @@ import GameLogic.BackendBoard.Type;
 
 public class Pawn extends Piece {
 
-    private boolean madeAMove;
+    private boolean enPassantStillPossible;
+    private boolean isInEnPassantPosition;
+    private List<Point> enPassantMoves;
 
     public Pawn(Color color) {
         super(Type.PAWN, color);
-        madeAMove = false;
+        isInEnPassantPosition = false;
+        enPassantStillPossible = true;
     }
 
     @Override
@@ -24,16 +27,20 @@ public class Pawn extends Piece {
         origin.y = this.position.y;
         List<Point> normalMoves = getNormalMoves(origin, board);
         List<Point> killsMoves = getKillsMoves(origin, board);
+        enPassantMoves = getEnPassantMoves(origin, board);
         moves.addAll(normalMoves);
         moves.addAll(killsMoves);
+        moves.addAll(enPassantMoves);
         return moves;
     }
 
     @Override
     public void makeAMove(Point position) {
+        if(enPassantStillPossible) {
+            checkIfInEnPassantPosition(this.position, position);
+        }
         this.position.x = position.x;
         this.position.y = position.y;
-        this.madeAMove = true;
     }
 
     private List<Point> getNormalMoves(Point origin, BackendBoard board) {
@@ -43,7 +50,7 @@ public class Pawn extends Piece {
             destination.y += 1;
             if (isNormalMove(destination, board)) {
                 moves.add(new Point(destination.x, destination.y));
-                if(!madeAMove && isInBounds(origin.y+2)) {
+                if(!isInEnPassantPosition && isInBounds(origin.y+2)) {
                     destination.y += 1;
                     if (isNormalMove(destination, board)) {
                         moves.add(new Point(destination.x, destination.y));
@@ -56,7 +63,7 @@ public class Pawn extends Piece {
             destination.y -= 1;
             if (isNormalMove(destination, board)) {
                 moves.add(new Point(destination.x, destination.y));
-                if(!madeAMove && isInBounds(origin.y-2)) {
+                if(!isInEnPassantPosition && isInBounds(origin.y-2)) {
                     destination.y -= 1;
                     if (isNormalMove(destination, board)) {
                         moves.add(new Point(destination.x, destination.y));
@@ -116,4 +123,53 @@ public class Pawn extends Piece {
         return !board.getHasPiece(destination);
     }
 
+    private void checkIfInEnPassantPosition(Point oldPosition, Point newPosition) {
+        if(oldPosition.y == 1 || oldPosition.y == 6) {
+            if(newPosition.y == 3 || newPosition.y == 4) {
+                isInEnPassantPosition = true;
+            } else {
+                enPassantStillPossible = false;
+            }
+        }
+    }
+
+    private List<Point> getEnPassantMoves(Point piecePosition, BackendBoard board) {
+        List<Point> enPassantMoves = new ArrayList<>();
+        Point checkedPosition = new Point(this.position.x, this.position.y);
+        if((piecePosition.y == 3 && color == Color.white) || (piecePosition.y == 4 && color == Color.black)){
+            checkedPosition.x += 1;
+            if(isInBounds(checkedPosition.x) && hasEnPassantMove(board.getPiece(checkedPosition) ,board)){
+                if(color == Color.white){
+                    checkedPosition.y -= 1;
+                } else {
+                    checkedPosition.y += 1;
+                }
+                enPassantMoves.add(checkedPosition);
+            }
+            checkedPosition = new Point(this.position.x, this.position.y);
+            if(isInBounds(checkedPosition.x) && hasEnPassantMove(board.getPiece(checkedPosition) ,board)){
+                if(color == Color.white){
+                    checkedPosition.y -= 1;
+                } else {
+                    checkedPosition.y += 1;
+                }
+                enPassantMoves.add(checkedPosition);
+            }
+        }
+        return enPassantMoves;
+    }
+
+    private boolean hasEnPassantMove(Piece piece, BackendBoard board){
+        if(piece instanceof Pawn){
+            Pawn tempPawn = (Pawn) piece;
+            if(tempPawn.isInEnPassantPosition) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Point> getEnPassantMoves() {
+        return enPassantMoves;
+    }
 }

@@ -1,7 +1,7 @@
 package GameManagement;
 
 import GameLogic.BackendBoard;
-import GameObjects.Piece;
+import GameObjects.Pawn;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ public class ActionsPreformedHandler {
     private BackendBoard backendBoard;
     private Main controller;
     private boolean isChoosingPiece;
+    private boolean canMakeEnPassantMove;
     private List<Point> legalMovesForPiece;
     private Point origin;
     private Point destination;
@@ -20,6 +21,7 @@ public class ActionsPreformedHandler {
         this.backendBoard = backendBoard;
         this.controller = controller;
         isChoosingPiece = true;
+        canMakeEnPassantMove = false;
     }
 
     public void mouseClicked(Point position) {
@@ -70,6 +72,9 @@ public class ActionsPreformedHandler {
         for (Point legalDestination: legalMovesForPiece) {
             if(position.equals(legalDestination)){
                 backendBoard.makeAMove(origin, destination);
+                if(canMakeEnPassantMove){
+                    handleEnPassant(destination);
+                }
                 break;
             }
         }
@@ -83,13 +88,13 @@ public class ActionsPreformedHandler {
         origin = position;
         if(hasPlayersPiece(position)) {
             isChoosingPiece = false;
+            legalMovesForPiece = getLegalMoves(position);
             drawLegalTiles(position);
             controller.drawPieceTileRed(position);
         }
     }
 
     private void updateBoards(){
-        //controller.updateLogicBoard();
         controller.updateGUIBoard();
     }
 
@@ -122,14 +127,27 @@ public class ActionsPreformedHandler {
     }
 
     private List<Point> getLegalMoves(Point position) {
-        if(this.backendBoard.getPiece(position) == null) {
+        if(backendBoard.getPiece(position) == null) {
             return null;
         }
-        List<Point> moves = this.backendBoard.getPiece(position).getAllMoves(backendBoard);
+        List<Point> moves = backendBoard.getPiece(position).getAllMoves(backendBoard);
 
         if(moves.size() != 0) {
             removeCheckingMoves(position, moves, backendBoard);
         }
+        // will make a flag if the player can make an enPassant move
+        if(backendBoard.getPiece(position) instanceof Pawn){
+            Pawn tempPawn = (Pawn) backendBoard.getPiece(position);
+            for (Point legalMove: moves) {
+                for (Point enPasantMove: tempPawn.getEnPassantMoves()) {
+                    if(legalMove.equals(enPasantMove)){
+                        canMakeEnPassantMove = true;
+                        break;
+                    }
+                }
+            }
+        }
+
         return moves;
     }
 
@@ -165,6 +183,22 @@ public class ActionsPreformedHandler {
 
          }
 
+    }
+
+    // special moves todo add castling and promotion (הצרחה וחייל למלכה )
+    private void handleEnPassant(Point position) {
+        Pawn tempPawn = (Pawn) backendBoard.getPiece(position);
+        Point enemyPawn = new Point(position.x, position.y);
+        for (Point enPassantMove: tempPawn.getEnPassantMoves()) {
+            if(position.equals(enPassantMove)){
+                if(tempPawn.getColor() == Color.white){
+                    enemyPawn.y += 1;
+                } else {
+                    enemyPawn.y -= 1;
+                }
+                backendBoard.clearTile(enemyPawn);
+            }
+        }
     }
 
     public BackendBoard getBackendBoardInstance() {
