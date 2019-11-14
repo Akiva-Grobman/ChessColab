@@ -66,9 +66,7 @@ public class ActionsPreformedHandler {
         return getLegalMoves(position).size() != 0;
     }
 
-
     private void tryToMakeAMove(Point position) {
-        // todo don't make the tile red if there are no moves (DONE: function "canMove")
         for (Point legalDestination: legalMovesForPiece) {
             if(position.equals(legalDestination)){
                 backendBoard.makeAMove(origin, destination);
@@ -129,14 +127,45 @@ public class ActionsPreformedHandler {
         }
         List<Point> moves = this.backendBoard.getPiece(position).getAllMoves(backendBoard);
 
-        // FIXME: "after" is legal moves after clean Sach moves
-        //List<Point> after = this.backendBoard.removeMoves(moves, position, backendBoard); // FIXME: 13/11/2019
-
-
+        if(moves.size() != 0) {
+            removeCheckingMoves(position, moves, backendBoard);
+        }
         return moves;
     }
 
+    private void removeCheckingMoves(Point playersPosition, List<Point> moves, BackendBoard board){
+        List<Point> kingCheckingMoves = new ArrayList<>();
+        List<Point> enemyMoves;
+        Point playersKingPosition;
+        BackendBoard newBoard = null;
 
+        // new board instance with different pointer
+        try {
+            newBoard = new BackendBoard(board);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        // find all king checking moves
+        for (Point positionBeingChecked: moves) {
+            newBoard.makeAMove(playersPosition, positionBeingChecked);
+            enemyMoves = newBoard.getAllEnemyMoves(positionBeingChecked);
+            playersKingPosition = newBoard.getPlayerKingPosition(positionBeingChecked);
+            for (Point enemyPossibleMove: enemyMoves) {
+                if (enemyPossibleMove.equals(playersKingPosition)){
+                    kingCheckingMoves.add(positionBeingChecked);
+                }
+            }
+            newBoard.makeAMove(positionBeingChecked, playersPosition);
+        }
+
+        // remove king checking moves
+         for (Point checkingMove: kingCheckingMoves) {
+                moves.remove(checkingMove);
+
+         }
+
+    }
 
     public BackendBoard getBackendBoardInstance() {
         return backendBoard;

@@ -1,5 +1,6 @@
 package GameLogic;
 
+import GUI.GUIBoard;
 import GameObjects.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,8 +25,13 @@ public class BackendBoard implements Cloneable {
         initializeBoard();
     }
 
-    public BackendBoard(BackendBoard board) {
-        this.board = board.board.clone();
+    public BackendBoard(BackendBoard board) throws CloneNotSupportedException {
+        this.board = new Tile[BackendBoard.COLUMNS][BackendBoard.ROWS];
+        for (int y = 0; y < this.board.length; y++) {
+            for (int x = 0; x < this.board[y].length; x++) {
+                this.board[y][x] = (Tile) board.board[y][x].clone();
+            }
+        }
     }
 
     private void initializeBoard() {
@@ -103,10 +109,19 @@ public class BackendBoard implements Cloneable {
         return board[position.y][position.x].isHasPiece();
     }
 
-    public void makeAMove(Point origin, Point destination) {
-        board[origin.y][origin.x].getPiece().makeAMove(destination);
-        board[destination.y][destination.x].updateTile(board[origin.y][origin.x].getPiece(), true);
-        board[origin.y][origin.x].updateTile(null, false);
+    public void makeAMove(Point origin, Point destination){
+        Tile originTile = board[origin.y][origin.x];
+        Tile destinationTile = board[destination.y][destination.x];
+        Piece pieceWithNewPointer;
+        try {
+            pieceWithNewPointer = (Piece) originTile.getPiece().clone();
+        } catch (CloneNotSupportedException e) {
+            // will not have a new pointer
+            pieceWithNewPointer = originTile.getPiece();
+        }
+        pieceWithNewPointer.makeAMove(destination);
+        destinationTile.updateTile(pieceWithNewPointer, true);
+        originTile.updateTile(null, false);
     }
 
     public Piece getPiece(Point position) throws NullPointerException {
@@ -160,7 +175,8 @@ public class BackendBoard implements Cloneable {
 
     private List<Point> getAllEnemyPieces(Point origin){
         List<Point> enemyPieces = new ArrayList<>();
-        Color playersColor = board[origin.y][origin.x].getPiece().getColor();
+        Tile originTile = board[origin.y][origin.x];
+        Color playersColor = originTile.getPiece().getColor();
         Color enemyColor;
         Point enemyPiece = new Point();
 

@@ -91,7 +91,6 @@ public class Bishop extends Piece {
                 break;
         }
 
-
         return moves;
     }
 

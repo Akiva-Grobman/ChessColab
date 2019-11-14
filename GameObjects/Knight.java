@@ -16,6 +16,7 @@ public class Knight extends Piece {
     @Override
     public List<Point> getAllMoves(BackendBoard board) {
         List<Point> moves = new ArrayList<>();
+
         return moves;
     }
 

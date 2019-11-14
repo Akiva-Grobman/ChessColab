@@ -4,7 +4,7 @@ import GameObjects.Piece;
 
 import java.awt.*;
 
-class Tile implements Cloneable{
+class Tile implements Cloneable {
 
     private Piece piece;
     private Point position;

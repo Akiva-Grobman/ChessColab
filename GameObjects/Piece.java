@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable{
 
     protected Point position;
     protected boolean isAlive;
@@ -63,14 +63,9 @@ public abstract class Piece {
         return position >= 0 && position < 8;
     }
 
-    List<Point> removeCheckingMoves(List<Point> allMoves, BackendBoard board){
-        List<Point> moves = new ArrayList<>(allMoves);
-        BackendBoard newBoard = new BackendBoard(board);
-        for (Point position: moves) {
-            newBoard.makeAMove(this.position, position);
-
-        }
-        return moves;
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
