@@ -74,6 +74,7 @@ public class ActionsPreformedHandler {
                 backendBoard.makeAMove(origin, destination);
                 if(canMakeEnPassantMove){
                     handleEnPassant(destination);
+                    canMakeEnPassantMove = false;
                 }
                 break;
             }
