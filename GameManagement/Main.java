@@ -35,8 +35,8 @@ public class Main {
         }
     }
 
-    void drawTiles(List<Point> legalMovesForPiece) {
-        this.GUIBoard.drawTiles(legalMovesForPiece);
+    void drawTiles(List<Point> legalMovesForPiece,List<Point> illegalMovesForPiece) {
+        this.GUIBoard.drawTiles(legalMovesForPiece, illegalMovesForPiece);
     }
 
     void resetTileColors() {

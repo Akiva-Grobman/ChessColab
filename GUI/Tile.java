@@ -20,6 +20,8 @@ class Tile extends JPanel implements MouseListener {
     int x;
     int y;
     boolean isEmpty;
+    boolean hasIllegalMoves;
+    JLabel illegalLabel = new JLabel("X");
     Color tileColor;
     Type pieceType;
     private BufferedImage image;
@@ -31,6 +33,7 @@ class Tile extends JPanel implements MouseListener {
         this.originalColor = color;
         this.handler = handler;
         this.isEmpty = true;
+        this.hasIllegalMoves = false;
         panelSetUp();
         this.repaint();
     }
@@ -38,6 +41,12 @@ class Tile extends JPanel implements MouseListener {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         this.setBackground(tileColor);
+        this.illegalLabel.setFont(new Font("Verdana",1,65));
+        if(hasIllegalMoves) {
+            this.add(illegalLabel);
+        } else {
+            this.removeAll();
+        }
         if(!isEmpty){
             try {
                 image = getPieceImage();

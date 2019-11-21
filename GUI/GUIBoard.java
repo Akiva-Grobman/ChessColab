@@ -95,12 +95,21 @@ public class GUIBoard extends JFrame {
         }
     }
 
-    public void drawTiles(List<Point> legalMovesForPiece) {
+    public void drawTiles(List<Point> legalMovesForPiece, List<Point> illegalMovesForPiece) {
         for (Tile[] tiles: board) {
             for (Tile tile: tiles) {
                 for (int i = 0; i < legalMovesForPiece.size(); i++) {
                     if(tile.x == legalMovesForPiece.get(i).x && tile.y == legalMovesForPiece.get(i).y){
                         tile.tileColor = Color.cyan;
+                        tile.hasIllegalMoves = false;
+                        //tile.removeAll();
+                    }
+                    if (illegalMovesForPiece.size() != 0) {
+                        if (tile.x == illegalMovesForPiece.get(i).x && tile.y == illegalMovesForPiece.get(i).y) {
+                            tile.tileColor = Color.white;
+                            tile.add(tile.illegalLabel);
+                            //tile.hasIllegalMoves = true;
+                        }
                     }
                 }
             }

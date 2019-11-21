@@ -14,6 +14,7 @@ public class ActionsPreformedHandler {
     private boolean isChoosingPiece;
     private boolean canMakeEnPassantMove;
     private List<Point> legalMovesForPiece;
+    private List<Point> illegalMovesForPiece;
     private Point origin;
     private Point destination;
 
@@ -54,9 +55,13 @@ public class ActionsPreformedHandler {
 
     public void mouseEntered(Point position) {
         if(isChoosingPiece && isCurrentPlayersPiece(position)) {
-            drawLegalTiles(position);
+            legalMovesForPiece = getLegalMoves(position);
+            illegalMovesForPiece = getIllegalMoves(position);
+            drawLegalTiles();
         }
     }
+
+
 
     public void mouseExited(Point position) {
         if(isChoosingPiece) {
@@ -90,7 +95,8 @@ public class ActionsPreformedHandler {
         if(hasPlayersPiece(position)) {
             isChoosingPiece = false;
             legalMovesForPiece = getLegalMoves(position);
-            drawLegalTiles(position);
+            illegalMovesForPiece = getIllegalMoves(position);
+            drawLegalTiles();
             controller.drawPieceTileRed(position);
         }
     }
@@ -99,10 +105,9 @@ public class ActionsPreformedHandler {
         controller.updateGUIBoard();
     }
 
-    private void drawLegalTiles(Point position) {
-        legalMovesForPiece = getLegalMoves(position);
+    private void drawLegalTiles() {
         if(legalMovesForPiece != null) {
-            controller.drawTiles(legalMovesForPiece);
+            controller.drawTiles(legalMovesForPiece, illegalMovesForPiece);
         }
     }
 
@@ -148,8 +153,37 @@ public class ActionsPreformedHandler {
                 }
             }
         }
-
         return moves;
+    }
+
+    private List<Point> getIllegalMoves(Point position) {
+        List<Point> moves = backendBoard.getPiece(position).getAllMoves(backendBoard);
+
+        List<Point> kingCheckingMoves = new ArrayList<>();
+        List<Point> enemyMoves;
+        Point playersKingPosition;
+        BackendBoard newBoard = null;
+
+        // new board instance with different pointer
+        try {
+            newBoard = new BackendBoard(backendBoard);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        // find all king checking moves
+        for (Point positionBeingChecked: moves) {
+            newBoard.makeAMove(position, positionBeingChecked);
+            enemyMoves = newBoard.getAllEnemyMoves(positionBeingChecked);
+            playersKingPosition = newBoard.getPlayerKingPosition(positionBeingChecked);
+            for (Point enemyPossibleMove: enemyMoves) {
+                if (enemyPossibleMove.equals(playersKingPosition)){
+                    kingCheckingMoves.add(positionBeingChecked);
+                }
+            }
+            newBoard.makeAMove(positionBeingChecked, position);
+        }
+        return kingCheckingMoves;
     }
 
     private void removeCheckingMoves(Point playersPosition, List<Point> moves, BackendBoard board){
@@ -181,7 +215,6 @@ public class ActionsPreformedHandler {
         // remove king checking moves
          for (Point checkingMove: kingCheckingMoves) {
                 moves.remove(checkingMove);
-
          }
 
     }
