@@ -82,11 +82,12 @@ public class ActionsPreformedHandler {
     }
 
     private void choosingPiece(Point position) {
-        legalMovesForPiece = null;
-        illegalMovesForPiece = null;
+        List<Point> allPossibleMovesForPiece;
+        allPossibleMovesForPiece = backendBoard.getPiece(position).getAllMoves(backendBoard);
+        illegalMovesForPiece = getIllegalMovesForPiece(position, allPossibleMovesForPiece);
+        legalMovesForPiece = getLegalMoves(allPossibleMovesForPiece);
+        setFlagsForSpecialMoves(position, allPossibleMovesForPiece);
         origin = position;
-        legalMovesForPiece = getLegalMoves(position);
-        illegalMovesForPiece = getIllegalMovesForPiece(position, legalMovesForPiece);
     }
 
     private void tryToMakeAMove(Point position) {
@@ -114,6 +115,7 @@ public class ActionsPreformedHandler {
             controller.drawLegalTiles(legalMovesForPiece);
         }
         if(illegalMovesForPiece.size() != 0) {
+            System.out.println("drawing illegal moves");
             controller.drawIllegalTiles(illegalMovesForPiece);
         }
     }
@@ -122,13 +124,11 @@ public class ActionsPreformedHandler {
         controller.updateGUIBoard();
     }
 
-    private List<Point> getLegalMoves(Point position) {
-        List<Point> moves = backendBoard.getPiece(position).getAllMoves(backendBoard);
-        if(moves.size() != 0) {
-            removeCheckingMoves(position, moves);
+    private List<Point> getLegalMoves(List<Point> allPossibleMovesForPiece) {
+        if(allPossibleMovesForPiece.size() != 0) {
+            removeCheckingMoves(allPossibleMovesForPiece);
         }
-        setFlagsForSpecialMoves(position, moves);
-        return moves;
+        return allPossibleMovesForPiece;
     }
 
     private List<Point> getIllegalMovesForPiece(Point playersPosition, List<Point> moves) {
@@ -150,9 +150,9 @@ public class ActionsPreformedHandler {
         return kingCheckingMoves;
     }
 
-    private void removeCheckingMoves(Point playersPosition, List<Point> moves){
+    private void removeCheckingMoves(List<Point> moves){
         List<Point> kingCheckingMoves;
-        kingCheckingMoves = getIllegalMovesForPiece(playersPosition, moves);
+        kingCheckingMoves = illegalMovesForPiece;
         // remove king checking moves
          for (Point checkingMove: kingCheckingMoves) {
                 moves.remove(checkingMove);
