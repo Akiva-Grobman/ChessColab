@@ -115,7 +115,6 @@ public class ActionsPreformedHandler {
             controller.drawLegalTiles(legalMovesForPiece);
         }
         if(illegalMovesForPiece.size() != 0) {
-            System.out.println("drawing illegal moves");
             controller.drawIllegalTiles(illegalMovesForPiece);
         }
     }

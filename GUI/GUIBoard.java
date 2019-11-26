@@ -16,7 +16,6 @@ public class GUIBoard extends JFrame {
     private BackendBoard backendBoard;
     private Color White = new Color(242, 218, 182);
     private Color Black = new Color(181, 137, 102);
-    private JLabel ilLegalMoveX;
     static final int TILE_SIZE = 90;
 
     public GUIBoard(ActionsPreformedHandler handler) {
@@ -28,18 +27,11 @@ public class GUIBoard extends JFrame {
             e.printStackTrace();
         }
         this.setIconImage(icon);
-        setLabel();
         backendBoard = handler.getBackendBoardInstance();
         boardSetUP(handler);
         syncWithLogicBoard();
         paintBoard();
         this.setVisible(true);
-    }
-
-    private void setLabel() {
-        ilLegalMoveX = new JLabel("X");
-        ilLegalMoveX.setFont(new Font("Verdana",Font.BOLD,65));
-        ilLegalMoveX.setForeground(Color.red);
     }
 
     public void updateBoard(){
@@ -108,7 +100,7 @@ public class GUIBoard extends JFrame {
             for (Tile tile: tiles) {
                 for (Point point : illegalMovesForPiece) {
                     if (tile.x == point.x && tile.y == point.y) {
-                        tile.add(ilLegalMoveX);
+                        tile.add(new CustomXLabel());
                     }
                 }
             }
@@ -138,7 +130,8 @@ public class GUIBoard extends JFrame {
         for (Tile[] tiles: board) {
             for (Tile tile: tiles) {
                 tile.resetTileColor();
-                tile.remove(ilLegalMoveX);
+                tile.removeAll();
+                tile.revalidate();
             }
         }
         paintBoard();
