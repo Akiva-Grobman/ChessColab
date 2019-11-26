@@ -15,6 +15,7 @@ public class ActionsPreformedHandler {
     private boolean isChoosingPiece;
     private boolean canMakeEnPassantMove;
     private List<Point> legalMovesForPiece;
+    private List<Point> illegalMovesForPiece;
     private Point origin;
     private Point destination;
 
@@ -25,55 +26,73 @@ public class ActionsPreformedHandler {
         canMakeEnPassantMove = false;
     }
 
-    public void mouseClicked(Point position) {
-        if(isChoosingPiece && isCurrentPlayersPiece(position) && canMove(position)){
+    public void mouseEntered(Point position) {
+        if(isChoosingPiece && isCurrentPlayersPiece(position)) {
             choosingPiece(position);
-        } else if(position.equals(origin)) {
-            controller.resetTileColors();
-            isChoosingPiece = true;
-        } else if(!isChoosingPiece && !isCurrentPlayersPiece(position)) {
-            destination = position;
-            if (!origin.equals(destination)) {
-                if (isCurrentPlayersPiece(destination)) {
-                    choosingPiece(position);
-                } else {
-                    tryToMakeAMove(position);
-                }
-            }
-            controller.resetTileColors();
+            drawTiles();
+        }
+    }
+
+    public void mouseExited() {
+        if(isChoosingPiece) {
+            controller.resetTilesToOriginalColors();
             isChoosingPiece = true;
         }
-        updateBoards();
     }
 
     public void mousePressed(Point position) {
-    }
-
-    public void mouseReleased(Point position) {
-
-    }
-
-    public void mouseEntered(Point position) {
-        if(isChoosingPiece && isCurrentPlayersPiece(position)) {
-            drawLegalTiles(position);
+        if(cancelingClick(position)){
+            controller.resetTilesToOriginalColors();
+            isChoosingPiece = true;
         }
-    }
-
-    public void mouseExited(Point position) {
-        if(isChoosingPiece) {
-            controller.resetTileColors();
+        if(isChoosingPiece && isCurrentPlayersPiece(position)){
+            choosingPiece(position);
+            drawTiles();
+            if(hasMoves()) {
+                controller.drawPieceTileRed(position);
+                isChoosingPiece = false;
+            }
+            // todo check logic
+        } else if(!isChoosingPiece && backendBoard.getHasPiece(origin)) {
+            destination = position;
+            if (isCurrentPlayersPiece(destination)) {
+                choosingPiece(position);
+                drawTiles();
+                if(hasMoves()) {
+                    controller.drawPieceTileRed(position);
+                    isChoosingPiece = false;
+                }
+            } else {
+                tryToMakeAMove(position);
+            }
+            controller.resetTilesToOriginalColors();
+            isChoosingPiece = true;
         }
+        updateGUIBoard();
     }
 
-    private boolean canMove(Point position){
-        return getLegalMoves(position).size() != 0;
+    private boolean cancelingClick(Point position) {
+        boolean playersPiece;
+        try {
+            playersPiece = areTheSameColor(backendBoard.getPiece(position).getColor(), controller.getCurrentPlayersColor());
+        } catch (NullPointerException e) {
+            playersPiece = false;
+        }
+        return position.equals(origin) || playersPiece;
+    }
+
+    private void choosingPiece(Point position) {
+        legalMovesForPiece = null;
+        illegalMovesForPiece = null;
+        origin = position;
+        legalMovesForPiece = getLegalMoves(position);
+        illegalMovesForPiece = getIllegalMovesForPiece(position, legalMovesForPiece);
     }
 
     private void tryToMakeAMove(Point position) {
         for (Point legalDestination: legalMovesForPiece) {
             if(position.equals(legalDestination)){
                 backendBoard.makeAMove(origin, destination);
-                terminateGame();
                 if(gameIsOver()){
                     terminateGame();
                     return;
@@ -90,59 +109,59 @@ public class ActionsPreformedHandler {
         }
     }
 
-    private void choosingPiece(Point position) {
-        legalMovesForPiece = null;
-        origin = position;
-        if(hasPlayersPiece(position)) {
-            isChoosingPiece = false;
-            legalMovesForPiece = getLegalMoves(position);
-            drawLegalTiles(position);
-            controller.drawPieceTileRed(position);
+    private void drawTiles() {
+        if(hasMoves()) {
+            controller.drawLegalTiles(legalMovesForPiece);
+        }
+        if(illegalMovesForPiece.size() != 0) {
+            controller.drawIllegalTiles(illegalMovesForPiece);
         }
     }
 
-    private void updateBoards(){
+    private void updateGUIBoard(){
         controller.updateGUIBoard();
     }
 
-    private void drawLegalTiles(Point position) {
-        legalMovesForPiece = getLegalMoves(position);
-        if(legalMovesForPiece != null) {
-            controller.drawTiles(legalMovesForPiece);
-        }
-    }
-
-    private boolean isCurrentPlayersPiece(Point position) {
-        try {
-            return areTheSameColor(backendBoard.getPiece(position).getColor(), controller.getCurrentPlayersColor());
-        } catch (NullPointerException e){
-            return false;
-        }
-    }
-
-    private boolean hasPlayersPiece(Point position) {
-        boolean hasPiece = backendBoard.getHasPiece(position);
-        boolean isPlayersPiece = false;
-        if(hasPiece){
-            isPlayersPiece = areTheSameColor(backendBoard.getPiece(position).getColor(), controller.getCurrentPlayersColor());
-        }
-        return isPlayersPiece;
-    }
-
-    private boolean areTheSameColor(Color color, Color currentPlayersColor) {
-        return color == currentPlayersColor;
-    }
-
     private List<Point> getLegalMoves(Point position) {
-        if(backendBoard.getPiece(position) == null) {
-            return null;
-        }
         List<Point> moves = backendBoard.getPiece(position).getAllMoves(backendBoard);
-
         if(moves.size() != 0) {
-            removeCheckingMoves(position, moves, backendBoard);
+            removeCheckingMoves(position, moves);
         }
-        // will make a flag if the player can make an enPassant move
+        setFlagsForSpecialMoves(position, moves);
+        return moves;
+    }
+
+    private List<Point> getIllegalMovesForPiece(Point playersPosition, List<Point> moves) {
+        BackendBoard board = getBackendBoardClone();
+        List<Point> kingCheckingMoves = new ArrayList<>();
+        List<Point> enemyMoves;
+        Point playersKingPosition;
+        for (Point positionBeingChecked: moves) {
+            board.makeAMove(playersPosition, positionBeingChecked);
+            enemyMoves = board.getAllEnemyMoves(positionBeingChecked);
+            playersKingPosition = board.getPlayerKingPosition(positionBeingChecked);
+            for (Point enemyPossibleMove: enemyMoves) {
+                if (enemyPossibleMove.equals(playersKingPosition)){
+                    kingCheckingMoves.add(positionBeingChecked);
+                }
+            }
+            board.makeAMove(positionBeingChecked, playersPosition);
+        }
+        return kingCheckingMoves;
+    }
+
+    private void removeCheckingMoves(Point playersPosition, List<Point> moves){
+        List<Point> kingCheckingMoves;
+        kingCheckingMoves = getIllegalMovesForPiece(playersPosition, moves);
+        // remove king checking moves
+         for (Point checkingMove: kingCheckingMoves) {
+                moves.remove(checkingMove);
+         }
+    }
+
+    // special moves todo add castling and promotion (הצרחה וחייל למלכה )
+    private void setFlagsForSpecialMoves(Point position, List<Point> moves) {
+        // en passant flag
         if(backendBoard.getPiece(position) instanceof Pawn){
             Pawn tempPawn = (Pawn) backendBoard.getPiece(position);
             for (Point legalMove: moves) {
@@ -154,45 +173,8 @@ public class ActionsPreformedHandler {
                 }
             }
         }
-
-        return moves;
     }
 
-    private void removeCheckingMoves(Point playersPosition, List<Point> moves, BackendBoard board){
-        List<Point> kingCheckingMoves = new ArrayList<>();
-        List<Point> enemyMoves;
-        Point playersKingPosition;
-        BackendBoard newBoard = null;
-
-        // new board instance with different pointer
-        try {
-            newBoard = new BackendBoard(board);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-
-        // find all king checking moves
-        for (Point positionBeingChecked: moves) {
-            newBoard.makeAMove(playersPosition, positionBeingChecked);
-            enemyMoves = newBoard.getAllEnemyMoves(positionBeingChecked);
-            playersKingPosition = newBoard.getPlayerKingPosition(positionBeingChecked);
-            for (Point enemyPossibleMove: enemyMoves) {
-                if (enemyPossibleMove.equals(playersKingPosition)){
-                    kingCheckingMoves.add(positionBeingChecked);
-                }
-            }
-            newBoard.makeAMove(positionBeingChecked, playersPosition);
-        }
-
-        // remove king checking moves
-         for (Point checkingMove: kingCheckingMoves) {
-                moves.remove(checkingMove);
-
-         }
-
-    }
-
-    // special moves todo add castling and promotion (הצרחה וחייל למלכה )
     private void handleEnPassant(Point position) {
         Pawn tempPawn = (Pawn) backendBoard.getPiece(position);
         Point enemyPawn = new Point(position.x, position.y);
@@ -231,8 +213,33 @@ public class ActionsPreformedHandler {
         controller.gameOver();
     }
 
+    private boolean isCurrentPlayersPiece(Point position) {
+        try {
+            return areTheSameColor(backendBoard.getPiece(position).getColor(), controller.getCurrentPlayersColor());
+        } catch (NullPointerException e){
+            return false;
+        }
+    }
+
+    private boolean areTheSameColor(Color color, Color currentPlayersColor) {
+        return color == currentPlayersColor;
+    }
+
+    private boolean hasMoves() {
+        return legalMovesForPiece.size() != 0;
+    }
+
+    private BackendBoard getBackendBoardClone(){
+        try {
+            return new BackendBoard(this.backendBoard);
+        } catch (CloneNotSupportedException e) {
+            throw new Error("board cloning failed \n" + e.getMessage());
+        }
+    }
+
     public BackendBoard getBackendBoardInstance() {
         return backendBoard;
     }
+
 
 }

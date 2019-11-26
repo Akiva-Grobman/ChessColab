@@ -16,6 +16,7 @@ public class GUIBoard extends JFrame {
     private BackendBoard backendBoard;
     private Color White = new Color(242, 218, 182);
     private Color Black = new Color(181, 137, 102);
+    private JLabel ilLegalMoveX;
     static final int TILE_SIZE = 90;
 
     public GUIBoard(ActionsPreformedHandler handler) {
@@ -27,11 +28,18 @@ public class GUIBoard extends JFrame {
             e.printStackTrace();
         }
         this.setIconImage(icon);
+        setLabel();
         backendBoard = handler.getBackendBoardInstance();
         boardSetUP(handler);
         syncWithLogicBoard();
         paintBoard();
         this.setVisible(true);
+    }
+
+    private void setLabel() {
+        ilLegalMoveX = new JLabel("X");
+        ilLegalMoveX.setFont(new Font("Verdana",Font.BOLD,65));
+        ilLegalMoveX.setForeground(Color.red);
     }
 
     public void updateBoard(){
@@ -95,12 +103,26 @@ public class GUIBoard extends JFrame {
         }
     }
 
-    public void drawTiles(List<Point> legalMovesForPiece) {
+    public void drawIllegalTiles(List<Point> illegalMovesForPiece){
         for (Tile[] tiles: board) {
             for (Tile tile: tiles) {
-                for (int i = 0; i < legalMovesForPiece.size(); i++) {
-                    if(tile.x == legalMovesForPiece.get(i).x && tile.y == legalMovesForPiece.get(i).y){
+                for (Point point : illegalMovesForPiece) {
+                    if (tile.x == point.x && tile.y == point.y) {
+                        tile.add(ilLegalMoveX);
+                    }
+                }
+            }
+        }
+        paintBoard();
+    }
+
+    public void drawLegalTiles(List<Point> legalMovesForPiece) {
+        for (Tile[] tiles: board) {
+            for (Tile tile: tiles) {
+                for (Point point : legalMovesForPiece) {
+                    if (tile.x == point.x && tile.y == point.y) {
                         tile.tileColor = Color.cyan;
+                        break;
                     }
                 }
             }
@@ -116,8 +138,10 @@ public class GUIBoard extends JFrame {
         for (Tile[] tiles: board) {
             for (Tile tile: tiles) {
                 tile.resetTileColor();
+                tile.remove(ilLegalMoveX);
             }
         }
         paintBoard();
     }
+
 }

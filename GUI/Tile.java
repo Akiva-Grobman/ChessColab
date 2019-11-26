@@ -10,19 +10,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 
 class Tile extends JPanel implements MouseListener {
 
     private ActionsPreformedHandler handler;
     private Color originalColor;
     private Color pieceColor;
+    private Type pieceType;
+    private BufferedImage image;
+    private boolean hasPiece;
+    Color tileColor;
     int x;
     int y;
-    boolean isEmpty;
-    Color tileColor;
-    Type pieceType;
-    private BufferedImage image;
 
     Tile(int x, int y, Color color, ActionsPreformedHandler handler) {
         this.x = x;
@@ -30,7 +29,7 @@ class Tile extends JPanel implements MouseListener {
         this.tileColor = color;
         this.originalColor = color;
         this.handler = handler;
-        this.isEmpty = true;
+        this.hasPiece = true;
         panelSetUp();
         this.repaint();
     }
@@ -38,7 +37,7 @@ class Tile extends JPanel implements MouseListener {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         this.setBackground(tileColor);
-        if(!isEmpty){
+        if(!hasPiece){
             try {
                 image = getPieceImage();
             } catch (IOException e) {
@@ -121,13 +120,13 @@ class Tile extends JPanel implements MouseListener {
     void addPiece(Color pieceColor, Type pieceType) {
         this.pieceColor = pieceColor;
         this.pieceType = pieceType;
-        this.isEmpty = false;
+        this.hasPiece = false;
     }
 
     void removePiece() {
         this.pieceType = null;
         this.pieceColor = null;
-        this.isEmpty = true;
+        this.hasPiece = true;
     }
 
     void resetTileColor(){
@@ -135,18 +134,8 @@ class Tile extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-        handler.mouseClicked(new Point(this.x, this.y));
-    }
-
-    @Override
     public void mousePressed(MouseEvent mouseEvent) {
         handler.mousePressed(new Point(this.x, this.y));
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-        handler.mouseReleased(new Point(this.x, this.y));
     }
 
     @Override
@@ -156,6 +145,18 @@ class Tile extends JPanel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
-        handler.mouseExited(new Point(this.x, this.y));
+        handler.mouseExited();
+    }
+
+    // unnecessary at the moment
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+        // no need to handle this event
+    }
+
+    // unnecessary at the moment
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
+        // no need to handle this event
     }
 }
