@@ -1,6 +1,7 @@
 package GameManagement;
 
 import GUI.GUIBoard;
+import GUI.GameOverWindow;
 import GameLogic.BackendBoard;
 
 import java.awt.*;
@@ -46,6 +47,19 @@ public class Main {
     void drawPieceTileRed(Point position) {
         redTile = position;
         GUIBoard.drawTileRed(position);
+    }
+
+    void gameOver() {
+        String gameOverMessage;
+        if(currentPlayersColor == Color.white){
+            gameOverMessage = "White";
+        } else {
+            gameOverMessage = "Black";
+        }
+        gameOverMessage += " Won";
+        new GameOverWindow(gameOverMessage);
+        backendBoard = null;
+        GUIBoard.dispose();
     }
 
     public static void main(String [] args){

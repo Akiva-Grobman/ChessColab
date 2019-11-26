@@ -1,6 +1,7 @@
 package GameManagement;
 
 import GameLogic.BackendBoard;
+import GameObjects.King;
 import GameObjects.Pawn;
 
 import java.awt.*;
@@ -72,6 +73,11 @@ public class ActionsPreformedHandler {
         for (Point legalDestination: legalMovesForPiece) {
             if(position.equals(legalDestination)){
                 backendBoard.makeAMove(origin, destination);
+                terminateGame();
+                if(gameIsOver()){
+                    terminateGame();
+                    return;
+                }
                 if(canMakeEnPassantMove){
                     handleEnPassant(destination);
                     canMakeEnPassantMove = false;
@@ -200,6 +206,29 @@ public class ActionsPreformedHandler {
                 backendBoard.clearTile(enemyPawn);
             }
         }
+    }
+
+    private boolean gameIsOver() {
+        int kingCount = 0;
+        Point tempPosition;
+        for (int y = 0; y < BackendBoard.ROWS; y++) {
+            for (int x = 0; x < BackendBoard.COLUMNS; x++) {
+                tempPosition = new Point(x,y);
+                if(backendBoard.getPiece(tempPosition) != null){
+                    if(backendBoard.getPiece(tempPosition) instanceof King){
+                        kingCount++;
+                    }
+                }
+                if(kingCount == 2) {
+                    break;
+                }
+            }
+        }
+        return kingCount < 2;
+    }
+
+    private void terminateGame() {
+        controller.gameOver();
     }
 
     public BackendBoard getBackendBoardInstance() {
