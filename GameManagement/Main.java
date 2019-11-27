@@ -2,7 +2,9 @@ package GameManagement;
 
 import GUI.GUIBoard;
 import GUI.GameOverWindow;
+import GUI.PawnPromotionWindow;
 import GameLogic.BackendBoard;
+import GameObjects.*;
 
 import java.awt.*;
 import java.util.List;
@@ -51,6 +53,29 @@ public class Main {
     void drawPieceTileRed(Point position) {
         redTile = position;
         GUIBoard.drawTileRed(position);
+    }
+
+    Piece getNewPiece(Point position) {
+        Piece piece;
+        Color pieceColor = backendBoard.getPiece(position).getColor();
+        PawnPromotionWindow pw = new PawnPromotionWindow(pieceColor, GUIBoard);
+        switch (pw.pieceChosenType) {
+            case QUEEN:
+                piece = new Queen(pieceColor);
+                break;
+            case ROOK:
+                piece = new Rook(pieceColor);
+                break;
+            case KNIGHT:
+                piece = new Knight(pieceColor);
+                break;
+            case BISHOP:
+                piece = new Bishop(pieceColor);
+                break;
+            default:
+                throw new Error("piece mismatch " + pw.pieceChosenType);
+        }
+        return piece;
     }
 
     void gameOver() {

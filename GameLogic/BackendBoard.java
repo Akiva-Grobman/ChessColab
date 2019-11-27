@@ -125,6 +125,10 @@ public class BackendBoard implements Cloneable {
         originTile.updateTile(null, false);
     }
 
+    public void changePieceType(Point position, Piece newPieceType){
+        board[position.y][position.x].addPiece(newPieceType);
+    }
+
     public Piece getPiece(Point position) {
         return board[position.y][position.x].getPiece();
     }
@@ -149,14 +153,13 @@ public class BackendBoard implements Cloneable {
         Color playersColor = board[origin.y][origin.x].getPiece().getColor();
 
         for (Point currentPiecePosition: playersPieces) {
-            if(board[currentPiecePosition.y][currentPiecePosition.x].getPiece().getPieceType() == Type.KING){
+            if(board[currentPiecePosition.y][currentPiecePosition.x].getPiece() instanceof King){
                 if(board[currentPiecePosition.y][currentPiecePosition.x].getPiece().getColor() == playersColor){
                     return currentPiecePosition;
-
                 }
             }
         }
-        throw new Error(" Game over this code should not have been called!\n current players color is" + playersColor.toString());
+        throw new Error(" Game over this code should not have been called!\n there is only one king \n current players color is" + playersColor);
     }
 
     private List<Point> getAllPlayerPieces(Point origin){

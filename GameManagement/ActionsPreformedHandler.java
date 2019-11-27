@@ -3,6 +3,7 @@ package GameManagement;
 import GameLogic.BackendBoard;
 import GameObjects.King;
 import GameObjects.Pawn;
+import GameObjects.Piece;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -102,6 +103,9 @@ public class ActionsPreformedHandler {
                     handleEnPassant(destination);
                     canMakeEnPassantMove = false;
                 }
+                if(promotedPawn(position)) {
+                    handlePromotion(position);
+                }
                 break;
             }
         }
@@ -158,7 +162,7 @@ public class ActionsPreformedHandler {
          }
     }
 
-    // special moves todo add castling and promotion (הצרחה וחייל למלכה )
+    // special moves todo add castling (הצרחה )
     private void setFlagsForSpecialMoves(Point position, List<Point> moves) {
         // en passant flag
         if(backendBoard.getPiece(position) instanceof Pawn){
@@ -171,6 +175,16 @@ public class ActionsPreformedHandler {
                     }
                 }
             }
+        }
+        //todo
+        // castling flag
+    }
+
+    private boolean promotedPawn(Point position) {
+        if(backendBoard.getPiece(position) instanceof Pawn) {
+            return position.y == 0 || position.y == 7;
+        } else {
+            return false;
         }
     }
 
@@ -187,6 +201,16 @@ public class ActionsPreformedHandler {
                 backendBoard.clearTile(enemyPawn);
             }
         }
+    }
+
+    private void handleCastling(Point position){
+
+    }
+
+    private void handlePromotion(Point position){
+        Piece newPiece;
+        newPiece = controller.getNewPiece(position);
+        backendBoard.changePieceType(position, newPiece);
     }
 
     private boolean gameIsOver() {
