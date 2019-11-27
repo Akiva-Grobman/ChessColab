@@ -14,7 +14,6 @@ public class Main {
     private BackendBoard backendBoard;
     private GUIBoard GUIBoard;
     private Color currentPlayersColor = Color.white;
-    private Point redTile;
 
     private Main(){
         backendBoard = new BackendBoard();
@@ -51,15 +50,23 @@ public class Main {
     }
 
     void drawPieceTileRed(Point position) {
-        redTile = position;
         GUIBoard.drawTileRed(position);
     }
 
     Piece getNewPiece(Point position) {
         Piece piece;
+        int direction;
         Color pieceColor = backendBoard.getPiece(position).getColor();
-        PawnPromotionWindow pw = new PawnPromotionWindow(pieceColor, GUIBoard);
-        switch (pw.pieceChosenType) {
+        PawnPromotionWindow pawnPromotionWindow = new PawnPromotionWindow(pieceColor, GUIBoard);
+        if(pawnPromotionWindow.pieceChosenType == null){
+            return null;
+        }
+        if(pieceColor == Color.white) {
+            direction = -1;
+        } else {
+            direction = 1;
+        }
+        switch (pawnPromotionWindow.pieceChosenType) {
             case QUEEN:
                 piece = new Queen(pieceColor);
                 break;
@@ -73,8 +80,9 @@ public class Main {
                 piece = new Bishop(pieceColor);
                 break;
             default:
-                throw new Error("piece mismatch " + pw.pieceChosenType);
+                throw new Error("piece mismatch " + pawnPromotionWindow.pieceChosenType);
         }
+        piece.setPosition(new Point(position.x, position.y + direction));
         return piece;
     }
 

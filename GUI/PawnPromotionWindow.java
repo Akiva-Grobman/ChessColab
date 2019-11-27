@@ -9,6 +9,9 @@ import java.io.IOException;
 
 public class PawnPromotionWindow {
 
+    private final int ROOK_POSITION = 1;
+    private final int KNIGHT_POSITION = 2;
+    private final int BISHOP_POSITION = 3;
     public Type pieceChosenType;
     private JDialog dialog;
 
@@ -26,21 +29,21 @@ public class PawnPromotionWindow {
     private JButton[] getButtons(Color playersColor) {
         JButton[] buttons = new JButton[4];
         String color;
-        if(playersColor == Color.black){
+        if(playersColor == Color.white){
             color = "white_";
         } else {
             color = "black_";
         }
         try {
             buttons[0] = new JButton(new ImageIcon(getPieceImage(color, Type.QUEEN)));
-            buttons[1] = new JButton(new ImageIcon(getPieceImage(color, Type.ROOK)));
-            buttons[2] = new JButton(new ImageIcon(getPieceImage(color, Type.KNIGHT)));
-            buttons[3] = new JButton(new ImageIcon(getPieceImage(color, Type.BISHOP)));
+            buttons[ROOK_POSITION] = new JButton(new ImageIcon(getPieceImage(color, Type.ROOK)));
+            buttons[KNIGHT_POSITION] = new JButton(new ImageIcon(getPieceImage(color, Type.KNIGHT)));
+            buttons[BISHOP_POSITION] = new JButton(new ImageIcon(getPieceImage(color, Type.BISHOP)));
         } catch (IOException e) {
             buttons[0] = new JButton("Queen");
-            buttons[1] = new JButton("Rook");
-            buttons[2] = new JButton("Knight");
-            buttons[3] = new JButton("Bishop");
+            buttons[ROOK_POSITION] = new JButton("Rook");
+            buttons[KNIGHT_POSITION] = new JButton("Knight");
+            buttons[BISHOP_POSITION] = new JButton("Bishop");
         }
         addListeners(buttons);
         return buttons;
@@ -56,13 +59,13 @@ public class PawnPromotionWindow {
     private void clicked(int buttonIndex) {
         dialog.dispose();
         switch (buttonIndex){
-            case 1:
+            case ROOK_POSITION:
                 pieceChosenType = Type.ROOK;
                 break;
-            case 2:
+            case KNIGHT_POSITION:
                 pieceChosenType = Type.KNIGHT;
                 break;
-            case 3:
+            case BISHOP_POSITION:
                 pieceChosenType = Type.BISHOP;
                 break;
             default:

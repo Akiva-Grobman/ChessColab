@@ -100,7 +100,7 @@ public class GUIBoard extends JFrame {
             for (Tile tile: tiles) {
                 for (Point point : illegalMovesForPiece) {
                     if (tile.x == point.x && tile.y == point.y) {
-                        tile.add(new CustomXLabel());
+                        tile.add(getXLabel());
                     }
                 }
             }
@@ -135,6 +135,16 @@ public class GUIBoard extends JFrame {
             }
         }
         paintBoard();
+    }
+
+    private JLabel getXLabel(){
+        JLabel xLabel = new JLabel();
+        xLabel.setText("X");
+        xLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        xLabel.setVerticalAlignment(SwingConstants.CENTER);
+        xLabel.setFont(new Font("Verdana",Font.BOLD,65));
+        xLabel.setForeground(Color.red);
+        return xLabel;
     }
 
 }

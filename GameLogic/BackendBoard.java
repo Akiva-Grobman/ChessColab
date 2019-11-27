@@ -98,18 +98,6 @@ public class BackendBoard implements Cloneable {
         board[7][3].addPiece(new Queen(Color.white));
     }
 
-    private Color getPieceColor(int row){
-        if(row == 0 || row == 1){
-            return Color.black;
-        } else {
-            return Color.white;
-        }
-    }
-
-    public boolean getHasPiece(Point position) {
-        return board[position.y][position.x].isHasPiece();
-    }
-
     public void makeAMove(Point origin, Point destination){
         Tile originTile = board[origin.y][origin.x];
         Tile destinationTile = board[destination.y][destination.x];
@@ -125,16 +113,28 @@ public class BackendBoard implements Cloneable {
         originTile.updateTile(null, false);
     }
 
+    public void clearTile(Point position){
+        board[position.y][position.x].updateTile(null, false);
+    }
+
     public void changePieceType(Point position, Piece newPieceType){
         board[position.y][position.x].addPiece(newPieceType);
+    }
+
+    private Color getPieceColor(int row){
+        if(row == 0 || row == 1){
+            return Color.black;
+        } else {
+            return Color.white;
+        }
     }
 
     public Piece getPiece(Point position) {
         return board[position.y][position.x].getPiece();
     }
 
-    public void clearTile(Point position){
-        board[position.y][position.x].updateTile(null, false);
+    public boolean getHasPiece(Point position) {
+        return board[position.y][position.x].isHasPiece();
     }
 
     public List<Point> getAllEnemyMoves(Point origin){
@@ -148,7 +148,7 @@ public class BackendBoard implements Cloneable {
         return allEnemyMoves;
     }
 
-    public Point getPlayerKingPosition(Point origin){
+    public Point getPlayerKingPosition(Point origin) {
         List<Point> playersPieces = getAllPlayerPieces(origin);
         Color playersColor = board[origin.y][origin.x].getPiece().getColor();
 

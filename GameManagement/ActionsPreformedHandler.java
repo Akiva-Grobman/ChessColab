@@ -53,7 +53,6 @@ public class ActionsPreformedHandler {
                 controller.drawPieceTileRed(position);
                 isChoosingPiece = false;
             }
-            // todo check logic
         } else if(!isChoosingPiece && backendBoard.getHasPiece(origin)) {
             destination = position;
             if (isCurrentPlayersPiece(destination)) {
@@ -94,6 +93,9 @@ public class ActionsPreformedHandler {
     private void tryToMakeAMove(Point position) {
         for (Point legalDestination: legalMovesForPiece) {
             if(position.equals(legalDestination)){
+                if(isPromotingPawn(origin)) {
+                    handlePromotion(origin);
+                }
                 backendBoard.makeAMove(origin, destination);
                 if(gameIsOver()){
                     terminateGame();
@@ -102,9 +104,6 @@ public class ActionsPreformedHandler {
                 if(canMakeEnPassantMove){
                     handleEnPassant(destination);
                     canMakeEnPassantMove = false;
-                }
-                if(promotedPawn(position)) {
-                    handlePromotion(position);
                 }
                 break;
             }
@@ -162,7 +161,7 @@ public class ActionsPreformedHandler {
          }
     }
 
-    // special moves todo add castling (הצרחה )
+    // special moves todo add castling
     private void setFlagsForSpecialMoves(Point position, List<Point> moves) {
         // en passant flag
         if(backendBoard.getPiece(position) instanceof Pawn){
@@ -180,9 +179,15 @@ public class ActionsPreformedHandler {
         // castling flag
     }
 
-    private boolean promotedPawn(Point position) {
+    private boolean isPromotingPawn(Point position) {
+        int oneBeforeLastLine;
+        if(backendBoard.getPiece(position).getColor() == Color.white){
+            oneBeforeLastLine = 1;
+        } else {
+            oneBeforeLastLine = 6;
+        }
         if(backendBoard.getPiece(position) instanceof Pawn) {
-            return position.y == 0 || position.y == 7;
+            return position.y == oneBeforeLastLine;
         } else {
             return false;
         }
