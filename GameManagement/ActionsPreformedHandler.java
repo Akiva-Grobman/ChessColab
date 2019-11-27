@@ -86,7 +86,7 @@ public class ActionsPreformedHandler {
         allPossibleMovesForPiece = backendBoard.getPiece(position).getAllMoves(backendBoard);
         illegalMovesForPiece = getIllegalMovesForPiece(position, allPossibleMovesForPiece);
         legalMovesForPiece = getLegalMoves(allPossibleMovesForPiece);
-        setFlagsForSpecialMoves(position, allPossibleMovesForPiece);
+        setFlagsForSpecialMoves(position, legalMovesForPiece);
         origin = position;
     }
 
@@ -167,15 +167,15 @@ public class ActionsPreformedHandler {
         if(backendBoard.getPiece(position) instanceof Pawn){
             Pawn tempPawn = (Pawn) backendBoard.getPiece(position);
             for (Point legalMove: moves) {
-                for (Point enPasantMove: tempPawn.getEnPassantMoves()) {
-                    if(legalMove.equals(enPasantMove)){
+                for (Point enPassantMove: tempPawn.getEnPassantMoves()) {
+                    if(legalMove.equals(enPassantMove)){
                         canMakeEnPassantMove = true;
                         break;
                     }
                 }
             }
         }
-        //todo
+        // todo
         // castling flag
     }
 
