@@ -4,7 +4,7 @@ import GUI.GUIBoard;
 import GUI.GameOverWindow;
 import GUI.PawnPromotionWindow;
 import BackendObjects.BackendBoard;
-import Pieces.*;
+import BackendObjects.Pieces.*;
 
 import java.awt.*;
 import java.util.List;

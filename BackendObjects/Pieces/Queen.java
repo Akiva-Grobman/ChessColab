@@ -1,4 +1,4 @@
-package Pieces;
+package BackendObjects.Pieces;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -7,20 +7,16 @@ import java.util.List;
 import BackendObjects.BackendBoard;
 import BackendObjects.BackendBoard.Type;
 
-public class Rook extends Piece {
+public class Queen extends Piece {
 
-    private boolean madeAMove;
-
-    public Rook(Color color) {
-        super(Type.ROOK, color);
-        this.madeAMove = false;
+    public Queen(Color color) {
+        super(Type.QUEEN, color);
     }
 
     @Override
     public void makeAMove(Point position) {
         this.position.x = position.x;
         this.position.y = position.y;
-        this.madeAMove = true;
     }
 
     @Override
@@ -34,6 +30,70 @@ public class Rook extends Piece {
 
         Point destination = new Point(origin);
 
+        /////////////////////////////// Slant ////////////////////////////////////
+
+        while (isInBounds(destination.y-1) && isInBounds(destination.x-1)){
+            destination.y--;
+            destination.x--;
+            if(hasEnemy(destination,board)){
+                moves.add(new Point(destination));
+                break;
+            }
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            } else
+                break;
+        }
+
+        destination = new Point(origin);
+
+        while (isInBounds(destination.y+1) && isInBounds(destination.x+1)){
+            destination.y++;
+            destination.x++;
+            if(hasEnemy(destination,board)){
+                moves.add(new Point(destination));
+                break;
+            }
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            } else
+                break;
+        }
+
+        destination = new Point(origin);
+
+        while (isInBounds(destination.x-1) && isInBounds(destination.y+1)){
+            destination.x--;
+            destination.y++;
+            if(hasEnemy(destination,board)){
+                moves.add(new Point(destination));
+                break;
+            }
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            } else
+                break;
+        }
+
+
+        destination = new Point(origin);
+
+        while (isInBounds(destination.x+1) && isInBounds(destination.y-1)){
+            destination.x++;
+            destination.y--;
+            if(hasEnemy(destination,board)){
+                moves.add(new Point(destination));
+                break;
+            }
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            } else
+                break;
+        }
+
+        ///////////////////////////// Straight //////////////////////////////////////
+
+        destination = new Point(origin);
 
         while (isInBounds(destination.y-1)){
             destination.y--;
@@ -89,6 +149,7 @@ public class Rook extends Piece {
             } else
                 break;
         }
+        ///////////////////////////////////////////////////////////////////////////
 
         return moves;
     }
@@ -100,6 +161,7 @@ public class Rook extends Piece {
             return true;
         return false;
     }
+
 
     private boolean hasEnemy(Point destination, BackendBoard board) {
         if (board.getPiece(destination) == null) {

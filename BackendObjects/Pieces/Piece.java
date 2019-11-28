@@ -1,4 +1,4 @@
-package Pieces;
+package BackendObjects.Pieces;
 
 import BackendObjects.BackendBoard;
 import BackendObjects.BackendBoard.Type;

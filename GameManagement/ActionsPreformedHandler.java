@@ -1,7 +1,7 @@
 package GameManagement;
 
 import BackendObjects.BackendBoard;
-import Pieces.*;
+import BackendObjects.Pieces.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

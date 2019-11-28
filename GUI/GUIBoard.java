@@ -2,7 +2,7 @@ package GUI;
 
 import BackendObjects.BackendBoard;
 import GameManagement.ActionsPreformedHandler;
-import Pieces.Piece;
+import BackendObjects.Pieces.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

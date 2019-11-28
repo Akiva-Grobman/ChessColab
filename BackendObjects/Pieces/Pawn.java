@@ -1,4 +1,4 @@
-package Pieces;
+package BackendObjects.Pieces;
 
 import java.awt.*;
 import java.util.ArrayList;

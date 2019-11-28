@@ -1,6 +1,6 @@
 package BackendObjects;
 
-import Pieces.Piece;
+import BackendObjects.Pieces.Piece;
 
 import java.awt.*;
 

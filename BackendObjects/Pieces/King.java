@@ -1,4 +1,4 @@
-package Pieces;
+package BackendObjects.Pieces;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -7,17 +7,21 @@ import java.util.List;
 import BackendObjects.BackendBoard;
 import BackendObjects.BackendBoard.Type;
 
-public class Bishop extends Piece {
+public class King extends Piece {
 
-    public Bishop(Color color) {
-        super(Type.BISHOP, color);
+    private boolean madeAMove;
+
+    public King(Color color){
+        super(Type.KING, color);
+        madeAMove = false;
     }
-
 
     @Override
     public void makeAMove(Point position) {
         this.position.x = position.x;
         this.position.y = position.y;
+        madeAMove = true;
+
     }
 
     @Override
@@ -32,63 +36,81 @@ public class Bishop extends Piece {
         Point destination = new Point(origin);
 
 
-        while (isInBounds(destination.y-1) && isInBounds(destination.x-1)){
+        if (isInBounds(destination.x-1)){
+            destination.x--;
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            }
+        }
+
+
+        destination = new Point(origin);
+
+        if (isInBounds(destination.x+1)){
+            destination.x++;
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            }
+        }
+
+
+        destination = new Point(origin);
+
+        if (isInBounds(destination.y+1)){
+            destination.y++;
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            }
+        }
+
+
+        destination = new Point(origin);
+
+        if (isInBounds(destination.y-1)){
+            destination.y--;
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            }
+        }
+
+        destination = new Point(origin);
+
+        if (isInBounds(destination.y-1) && isInBounds(destination.x-1)){
             destination.y--;
             destination.x--;
-            if(hasEnemy(destination,board)){
-                moves.add(new Point(destination));
-                break;
-            }
             if(!hasPlayerPiece(destination, origin, board)){
                 moves.add(new Point(destination));
-            } else
-                break;
+            }
         }
 
         destination = new Point(origin);
 
-        while (isInBounds(destination.y+1) && isInBounds(destination.x+1)){
+        if (isInBounds(destination.y+1) && isInBounds(destination.x+1)){
             destination.y++;
             destination.x++;
-            if(hasEnemy(destination,board)){
-                moves.add(new Point(destination));
-                break;
-            }
             if(!hasPlayerPiece(destination, origin, board)){
                 moves.add(new Point(destination));
-            } else
-                break;
+            }
         }
 
         destination = new Point(origin);
 
-        while (isInBounds(destination.x-1) && isInBounds(destination.y+1)){
+        if (isInBounds(destination.y+1) && isInBounds(destination.x-1)){
+            destination.y++;
             destination.x--;
-            destination.y++;
-            if(hasEnemy(destination,board)){
-                moves.add(new Point(destination));
-                break;
-            }
             if(!hasPlayerPiece(destination, origin, board)){
                 moves.add(new Point(destination));
-            } else
-                break;
+            }
         }
-
 
         destination = new Point(origin);
 
-        while (isInBounds(destination.x+1) && isInBounds(destination.y-1)){
-            destination.x++;
+        if (isInBounds(destination.y-1) && isInBounds(destination.x+1)){
             destination.y--;
-            if(hasEnemy(destination,board)){
-                moves.add(new Point(destination));
-                break;
-            }
+            destination.x++;
             if(!hasPlayerPiece(destination, origin, board)){
                 moves.add(new Point(destination));
-            } else
-                break;
+            }
         }
 
         return moves;
