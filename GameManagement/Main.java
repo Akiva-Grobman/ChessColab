@@ -11,13 +11,13 @@ import java.util.List;
 
 public class Main {
 
-    private BackendBoard backendBoard;
+    private BackendHandler backendHandler;
     private GUIBoard GUIBoard;
     private Color currentPlayersColor = Color.white;
 
     private Main(){
-        backendBoard = new BackendBoard();
-        GUIBoard = new GUIBoard(new ActionsPreformedHandler(backendBoard, this));
+        backendHandler = new BackendHandler(this, new BackendBoard());
+        GUIBoard = new GUIBoard(new GUIHandler(this));
     }
 
     void updateGUIBoard(){
@@ -26,37 +26,20 @@ public class Main {
     }
 
     Color getCurrentPlayersColor() {
-        return this.currentPlayersColor;
+        return currentPlayersColor;
     }
 
-    void changeCurrentPlayersColor(){
-        if (currentPlayersColor == Color.white){
-            currentPlayersColor = Color.black;
-        } else {
-            currentPlayersColor = Color.white;
-        }
+    Color getPieceColor(Point piecePosition) {
+        return backendHandler.getPieceColor(piecePosition);
     }
 
-    void drawLegalTiles(List<Point> legalMovesForPiece) {
-        this.GUIBoard.drawLegalTiles(legalMovesForPiece);
+    BackendBoard.Type getPieceType(Point piecePosition) {
+        return backendHandler.getPieceType(piecePosition);
     }
 
-    void drawIllegalTiles(List<Point> illegalMovesForPiece) {
-        this.GUIBoard.drawIllegalTiles(illegalMovesForPiece);
-    }
-
-    void resetTilesToOriginalColors() {
-        this.GUIBoard.resetTiles();
-    }
-
-    void drawPieceTileRed(Point position) {
-        GUIBoard.drawTileRed(position);
-    }
-
-    Piece getNewPiece(Point position) {
+    Piece getNewPiece(Point position, Color pieceColor) {
         Piece piece;
         int direction;
-        Color pieceColor = backendBoard.getPiece(position).getColor();
         PawnPromotionWindow pawnPromotionWindow = new PawnPromotionWindow(pieceColor, GUIBoard);
         if(pawnPromotionWindow.pieceChosenType == null){
             return null;
@@ -86,6 +69,23 @@ public class Main {
         return piece;
     }
 
+    void drawLegalTiles(List<Point> legalMovesForPiece) {
+        GUIBoard.drawLegalTiles(legalMovesForPiece);
+    }
+
+    void drawIllegalTiles(List<Point> illegalMovesForPiece) {
+        GUIBoard.drawIllegalTiles(illegalMovesForPiece);
+    }
+
+    void resetTilesToOriginalColors() {
+        GUIBoard.resetTiles();
+    }
+
+    void drawPieceTileRed(Point position) {
+        GUIBoard.drawTileRed(position);
+    }
+
+
     void gameOver() {
         String gameOverMessage;
         if(currentPlayersColor == Color.white){
@@ -95,13 +95,33 @@ public class Main {
         }
         gameOverMessage += " Won";
         new GameOverWindow(gameOverMessage);
-        backendBoard = null;
+        backendHandler = null;
         GUIBoard.dispose();
     }
 
     public static void main(String [] args){
         // todo add open window
         new Main();
+    }
+
+    boolean isCurrentPieceColor(Point position) {
+        return backendHandler.isCurrentPlayersPiece(position);
+    }
+
+    List<Point> getIllegalMovesForPiece(Point playersPosition) {
+        return backendHandler.getPieceIllegalMoves(playersPosition);
+    }
+
+    List<Point> getLegalMovesForPiece(Point playersPosition) {
+        return backendHandler.getPieceLegalMoves(playersPosition);
+    }
+
+    boolean getHasPiece(Point piecePosition) {
+        return backendHandler.getHasPiece(piecePosition);
+    }
+
+    void handleMove(Point origin, Point destination) {
+        backendHandler.handleMove(origin, destination);
     }
 
 }

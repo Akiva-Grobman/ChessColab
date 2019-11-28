@@ -135,10 +135,10 @@ public class BackendBoard implements Cloneable {
         return board[position.y][position.x].isHasPiece();
     }
 
-    public List<Point> getAllEnemyMoves(Point origin){
+    public List<Point> getAllEnemyMoves(Color playersColor){
         List<Point> allEnemyMoves = new ArrayList<>();
         List<Point> currentPieceMoves;
-        List<Point> enemyPieces = getAllEnemyPieces(origin);
+        List<Point> enemyPieces = getAllEnemyPieces(playersColor);
         for (Point enemyPiecePosition: enemyPieces) {
             currentPieceMoves = getPiece(enemyPiecePosition).getAllMoves(this);
             allEnemyMoves.addAll(currentPieceMoves); //todo might want to check for duplicates
@@ -146,9 +146,8 @@ public class BackendBoard implements Cloneable {
         return allEnemyMoves;
     }
 
-    public Point getPlayerKingPosition(Point origin) {
-        List<Point> playersPieces = getAllPlayerPieces(origin);
-        Color playersColor = board[origin.y][origin.x].getPiece().getColor();
+    public Point getPlayerKingPosition(Color playersColor) {
+        List<Point> playersPieces = getAllPlayerPieces(playersColor);
 
         for (Point currentPiecePosition: playersPieces) {
             if(board[currentPiecePosition.y][currentPiecePosition.x].getPiece() instanceof King){
@@ -157,12 +156,11 @@ public class BackendBoard implements Cloneable {
                 }
             }
         }
-        throw new Error(" Game over this code should not have been called!\n there is only one king \n current players color is" + playersColor);
+        return null;
     }
 
-    private List<Point> getAllPlayerPieces(Point origin){
+    private List<Point> getAllPlayerPieces(Color playersColor){
         List<Point> playersPieces = new ArrayList<>();
-        Color playersColor = board[origin.y][origin.x].getPiece().getColor();
         Point playerPiecePosition;
 
         for (int y = 0; y < ROWS; y++) {
@@ -179,10 +177,8 @@ public class BackendBoard implements Cloneable {
         return playersPieces;
     }
 
-    private List<Point> getAllEnemyPieces(Point origin){
+    private List<Point> getAllEnemyPieces(Color playersColor){
         List<Point> enemyPieces = new ArrayList<>();
-        Tile originTile = board[origin.y][origin.x];
-        Color playersColor = originTile.getPiece().getColor();
         Color enemyColor;
         Point enemyPiece = new Point();
 

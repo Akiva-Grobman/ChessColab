@@ -1,7 +1,7 @@
 package GUI;
 
 import BackendObjects.BackendBoard.Type;
-import GameManagement.ActionsPreformedHandler;
+import GameManagement.GUIHandler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 class Tile extends JPanel implements MouseListener {
 
-    private ActionsPreformedHandler handler;
+    private GUIHandler handler;
     private Color originalColor;
     private Color pieceColor;
     private Type pieceType;
@@ -23,7 +23,7 @@ class Tile extends JPanel implements MouseListener {
     int x;
     int y;
 
-    Tile(int x, int y, Color color, ActionsPreformedHandler handler) {
+    Tile(int x, int y, Color color, GUIHandler handler) {
         this.x = x;
         this.y = y;
         this.tileColor = color;

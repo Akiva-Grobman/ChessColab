@@ -1,8 +1,7 @@
 package GUI;
 
 import BackendObjects.BackendBoard;
-import GameManagement.ActionsPreformedHandler;
-import BackendObjects.Pieces.Piece;
+import GameManagement.GUIHandler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,13 +11,14 @@ import java.util.List;
 
 public class GUIBoard extends JFrame {
 
+    private GUIHandler handler;
     private Tile [][] board;
-    private BackendBoard backendBoard;
     private Color White = new Color(242, 218, 182);
     private Color Black = new Color(181, 137, 102);
     static final int TILE_SIZE = 90;
 
-    public GUIBoard(ActionsPreformedHandler handler) {
+    public GUIBoard(GUIHandler handler) {
+        this.handler = handler;
         Image icon = null;
         this.setTitle("Chess");
         try {
@@ -27,8 +27,7 @@ public class GUIBoard extends JFrame {
             e.printStackTrace();
         }
         this.setIconImage(icon);
-        backendBoard = handler.getBackendBoardInstance();
-        boardSetUP(handler);
+        boardSetUP();
         syncWithLogicBoard();
         paintBoard();
         this.setVisible(true);
@@ -46,7 +45,7 @@ public class GUIBoard extends JFrame {
         }
     }
 
-    private void boardSetUP(ActionsPreformedHandler handler) {
+    private void boardSetUP() {
         int windowWidth = TILE_SIZE * BackendBoard.ROWS;
         int windowHeight = TILE_SIZE * BackendBoard.COLUMNS;
         this.setLayout(new GridLayout(BackendBoard.ROWS, BackendBoard.COLUMNS));
@@ -56,10 +55,10 @@ public class GUIBoard extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         board = new Tile[BackendBoard.ROWS][BackendBoard.COLUMNS];
-        addTiles(handler);
+        addTiles();
     }
 
-    private void addTiles(ActionsPreformedHandler handler) {
+    private void addTiles() {
         Tile tile;
         Color color;
         for (int y = 0; y < BackendBoard.ROWS; y++) {
@@ -87,10 +86,9 @@ public class GUIBoard extends JFrame {
     }
 
     private void updatedTile(Tile tile, Point position) {
-        if(backendBoard.getHasPiece(position)){
-            Piece piece = backendBoard.getPiece(position);
-            tile.addPiece(piece.getColor(), piece.getPieceType());
-        } else {
+        if(handler.getHasPiece(position)) {
+            tile.addPiece(handler.getPieceColor(position), handler.getPieceType(position));
+        }  else {
             tile.removePiece();
         }
     }

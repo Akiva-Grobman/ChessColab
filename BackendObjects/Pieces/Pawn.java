@@ -27,11 +27,10 @@ public class Pawn extends Piece {
         origin.y = this.position.y;
         List<Point> normalMoves = getNormalMoves(origin, board);
         List<Point> killsMoves = getKillsMoves(origin, board);
-        enPassantMoves = getEnPassantMoves(origin, board);
+        enPassantMoves = getEnPassantMoves(origin, board);  // todo change to point
         moves.addAll(normalMoves);
         moves.addAll(killsMoves);
-        moves.addAll(enPassantMoves);
-        System.out.println(enPassantMoves);
+        // moves.add(enPassantMove(origin, board);
         return moves;
     }
 
