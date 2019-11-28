@@ -1,6 +1,6 @@
-package GameLogic;
+package BackendObjects;
 
-import GameObjects.Piece;
+import Pieces.Piece;
 
 import java.awt.*;
 

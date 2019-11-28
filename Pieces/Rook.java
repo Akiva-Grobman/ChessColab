@@ -1,23 +1,26 @@
-package GameObjects;
+package Pieces;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import GameLogic.BackendBoard;
-import GameLogic.BackendBoard.Type;
+import BackendObjects.BackendBoard;
+import BackendObjects.BackendBoard.Type;
 
-public class Bishop extends Piece {
+public class Rook extends Piece {
 
-    public Bishop(Color color) {
-        super(Type.BISHOP, color);
+    private boolean madeAMove;
+
+    public Rook(Color color) {
+        super(Type.ROOK, color);
+        this.madeAMove = false;
     }
-
 
     @Override
     public void makeAMove(Point position) {
         this.position.x = position.x;
         this.position.y = position.y;
+        this.madeAMove = true;
     }
 
     @Override
@@ -32,9 +35,8 @@ public class Bishop extends Piece {
         Point destination = new Point(origin);
 
 
-        while (isInBounds(destination.y-1) && isInBounds(destination.x-1)){
+        while (isInBounds(destination.y-1)){
             destination.y--;
-            destination.x--;
             if(hasEnemy(destination,board)){
                 moves.add(new Point(destination));
                 break;
@@ -47,23 +49,7 @@ public class Bishop extends Piece {
 
         destination = new Point(origin);
 
-        while (isInBounds(destination.y+1) && isInBounds(destination.x+1)){
-            destination.y++;
-            destination.x++;
-            if(hasEnemy(destination,board)){
-                moves.add(new Point(destination));
-                break;
-            }
-            if(!hasPlayerPiece(destination, origin, board)){
-                moves.add(new Point(destination));
-            } else
-                break;
-        }
-
-        destination = new Point(origin);
-
-        while (isInBounds(destination.x-1) && isInBounds(destination.y+1)){
-            destination.x--;
+        while (isInBounds(destination.y+1)){
             destination.y++;
             if(hasEnemy(destination,board)){
                 moves.add(new Point(destination));
@@ -75,12 +61,25 @@ public class Bishop extends Piece {
                 break;
         }
 
+        destination = new Point(origin);
+
+        while (isInBounds(destination.x-1)){
+            destination.x--;
+            if(hasEnemy(destination,board)){
+                moves.add(new Point(destination));
+                break;
+            }
+            if(!hasPlayerPiece(destination, origin, board)){
+                moves.add(new Point(destination));
+            } else
+                break;
+        }
+
 
         destination = new Point(origin);
 
-        while (isInBounds(destination.x+1) && isInBounds(destination.y-1)){
+        while (isInBounds(destination.x+1)){
             destination.x++;
-            destination.y--;
             if(hasEnemy(destination,board)){
                 moves.add(new Point(destination));
                 break;

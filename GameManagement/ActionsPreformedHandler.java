@@ -1,10 +1,7 @@
 package GameManagement;
 
-import GameLogic.BackendBoard;
-import GameObjects.King;
-import GameObjects.Pawn;
-import GameObjects.Piece;
-
+import BackendObjects.BackendBoard;
+import Pieces.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

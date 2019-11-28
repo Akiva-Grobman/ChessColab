@@ -1,9 +1,7 @@
-package GameLogic;
+package BackendObjects;
 
-import GUI.GUIBoard;
-import GameObjects.*;
+import Pieces.*;
 import java.awt.*;
-import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 

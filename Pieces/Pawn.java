@@ -1,11 +1,11 @@
-package GameObjects;
+package Pieces;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import GameLogic.BackendBoard;
-import GameLogic.BackendBoard.Type;
+import BackendObjects.BackendBoard;
+import BackendObjects.BackendBoard.Type;
 
 public class Pawn extends Piece {
 

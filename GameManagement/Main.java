@@ -3,8 +3,8 @@ package GameManagement;
 import GUI.GUIBoard;
 import GUI.GameOverWindow;
 import GUI.PawnPromotionWindow;
-import GameLogic.BackendBoard;
-import GameObjects.*;
+import BackendObjects.BackendBoard;
+import Pieces.*;
 
 import java.awt.*;
 import java.util.List;

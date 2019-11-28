@@ -1,6 +1,6 @@
 package GUI;
 
-import GameLogic.BackendBoard.Type;
+import BackendObjects.BackendBoard.Type;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

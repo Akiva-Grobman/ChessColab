@@ -1,8 +1,8 @@
 package GUI;
 
-import GameLogic.BackendBoard;
+import BackendObjects.BackendBoard;
 import GameManagement.ActionsPreformedHandler;
-import GameObjects.Piece;
+import Pieces.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -1,9 +1,8 @@
-package GameObjects;
+package Pieces;
 
-import GameLogic.BackendBoard;
-import GameLogic.BackendBoard.Type;
+import BackendObjects.BackendBoard;
+import BackendObjects.BackendBoard.Type;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece implements Cloneable{
