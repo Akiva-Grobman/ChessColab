@@ -12,6 +12,7 @@ public class Pawn extends Piece {
     private boolean enPassantStillPossible;
     private boolean isInEnPassantPosition;
     private List<Point> enPassantMoves;
+    private boolean moved;
 
     public Pawn(Color color) {
         super(Type.PAWN, color);
@@ -46,6 +47,7 @@ public class Pawn extends Piece {
         }
         this.position.x = position.x;
         this.position.y = position.y;
+        moved = false;
     }
 
     private List<Point> getNormalMoves(Point origin, BackendBoard board) {
@@ -55,7 +57,7 @@ public class Pawn extends Piece {
             destination.y += 1;
             if (isNormalMove(destination, board)) {
                 moves.add(new Point(destination.x, destination.y));
-                if(!isInEnPassantPosition && isInBounds(origin.y+2)) {
+                if(!moved && isInBounds(origin.y+2)) {
                     destination.y += 1;
                     if (isNormalMove(destination, board)) {
                         moves.add(new Point(destination.x, destination.y));
@@ -68,7 +70,7 @@ public class Pawn extends Piece {
             destination.y -= 1;
             if (isNormalMove(destination, board)) {
                 moves.add(new Point(destination.x, destination.y));
-                if(!isInEnPassantPosition && isInBounds(origin.y-2)) {
+                if(!moved && isInBounds(origin.y-2)) {
                     destination.y -= 1;
                     if (isNormalMove(destination, board)) {
                         moves.add(new Point(destination.x, destination.y));
