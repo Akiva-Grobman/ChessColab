@@ -6,6 +6,8 @@ import GameManagement.GUIHandler;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class GUIBoard extends JFrame {
             e.printStackTrace();
         }
         this.setIconImage(icon);
-        boardSetUP();
+        boardSetUp();
         syncWithLogicBoard();
         paintBoard();
         this.setVisible(true);
@@ -45,7 +47,7 @@ public class GUIBoard extends JFrame {
         }
     }
 
-    private void boardSetUP() {
+    private void boardSetUp() {
         int windowWidth = TILE_SIZE * BackendBoard.ROWS;
         int windowHeight = TILE_SIZE * BackendBoard.COLUMNS;
         this.setLayout(new GridLayout(BackendBoard.ROWS, BackendBoard.COLUMNS));
