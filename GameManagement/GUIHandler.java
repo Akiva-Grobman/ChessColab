@@ -29,18 +29,15 @@ public class GUIHandler {
     public void mouseExited() {
         if(isChoosingPiece) {
             controller.resetTilesToOriginalColors();
-            isChoosingPiece = true;
         }
     }
 
     public void mousePressed(Point position) {
-        if(cancelingClick(position)){
-            System.out.println("canceling click");
+        if(!isChoosingPiece && cancelingClick(position)){
+            isChoosingPiece = (controller.getHasPiece(position) && controller.getPieceColor(position) == controller.getCurrentPlayersColor());
             controller.resetTilesToOriginalColors();
-            isChoosingPiece = true;
         }
         if(isChoosingPiece && isCurrentPlayersPiece(position)){
-            System.out.println("choosing piece");
             choosingPiece(position);
             drawTiles();
             if(hasMoves()) {
@@ -48,19 +45,16 @@ public class GUIHandler {
                 isChoosingPiece = false;
             }
         } else if(!isChoosingPiece && controller.getHasPiece(origin)) {
-            System.out.println("choosing destination");
             destination = position;
             if (isCurrentPlayersPiece(destination)) {
-                System.out.println("players piece at destination canceling");
-                choosingPiece(position);
+                choosingPiece(destination);
                 drawTiles();
                 if(hasMoves()) {
-                    controller.drawPieceTileRed(position);
+                    controller.drawPieceTileRed(destination);
                     isChoosingPiece = false;
                 }
             } else {
                 controller.handleMove(origin, destination);
-                System.out.println("making a move");
             }
             controller.resetTilesToOriginalColors();
             isChoosingPiece = true;
@@ -81,14 +75,13 @@ public class GUIHandler {
     }
 
     private boolean cancelingClick(Point position) {
-        // todo bug
-        boolean playersPiece;
+        boolean hasPlayersPiece;
         try {
-            playersPiece = (controller.getPieceColor(origin) == controller.getPieceColor(destination));
+            hasPlayersPiece = (controller.getPieceColor(origin) == controller.getCurrentPlayersColor());
         } catch (NullPointerException e) {
-            playersPiece = false;
+            hasPlayersPiece = false;
         }
-        return position.equals(origin) || playersPiece;
+        return position.equals(origin) || hasPlayersPiece;
     }
 
     private void choosingPiece(Point position) {
